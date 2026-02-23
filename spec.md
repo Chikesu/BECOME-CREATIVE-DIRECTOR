@@ -1,20 +1,24 @@
-﻿# Hook & Viral Video Opening Generator  
-**(AI Agent – Video Output using Veo 3)**
+﻿# Crypto Video Hook & Launch Video Agent  
+**(AI Video Pipeline for Whales Market)**
 
 ---
 
 ## 1. Overview
-- The first 3 seconds determine whether viewers keep watching or scroll away.  
-- This agent generates **viral hooks** and automatically creates **3–5 second opening videos** to maximize retention and speed up video production.
-- These 3–5 second openings also enhance social posts by adding an immediate visual hook to content that is informative but lacks initial attention-grabbing impact.
+
+In crypto and DeFi, attention is scarce and information is complex. Product launches, feature updates, and partnership announcements often fail to capture attention in the first seconds.
+
+This agent generates **high-impact video hooks and short launch/explainer videos** optimized for crypto audiences. It helps transform complex product updates into engaging visual content that can be used immediately across X (Twitter), Telegram, landing pages, and social channels.
+
+Short 3–5 second openings also provide an immediate visual hook for content-heavy announcements, helping technical updates gain attention before deeper information is presented.
 
 ---
 
 ## 2. Target Users
-- Social media teams  
-- Marketing teams  
-- Content creators  
-- Video editors  
+
+- Whales Market marketing team  
+- Product & growth team  
+- Social media & community team  
+- Founder announcements & partnership comms  
 
 ---
 
@@ -22,34 +26,39 @@
 
 | Current Issues | Impact |
 |----------------|--------|
-| Viewers drop off within first seconds | Low retention |
-| Weak hooks | Videos underperform |
-| Brainstorming takes time | Slow workflow |
-| Reliance on personal creativity | Inconsistent quality |
-| Few variations to test | Hard to optimize performance |
+| Crypto updates are complex & technical | Hard to capture attention |
+| Announcements lack engaging openings | Low engagement |
+| Video production is slow | Missed momentum |
+| Messaging inconsistent across posts | Weak branding |
+| Difficult to explain features quickly | Low user understanding |
 
 ---
 
 ## 4. Goal
-Increase video performance by:
 
-- Improving retention & watch time  
-- Increasing completion rate  
-- Speeding up creative workflow  
-- Enabling quick testing of multiple directions  
+Enable fast production of engaging crypto video content that:
+
+- captures attention instantly  
+- simplifies complex features  
+- improves engagement on X & social channels  
+- accelerates product communication  
+- maintains strong brand consistency  
 
 ---
 
 ## 5. Solution
-The agent:
 
-1. Analyzes the brief  
-2. Generates viral hooks  
-3. Creates opening concepts  
-4. Produces Veo-ready prompts  
-5. Generates 3–5s opening videos  
-6. Suggests text & sound overlays  
-7. Provides multiple options for selection  
+The agent analyzes a product or announcement brief and generates:
+
+✔ strategic hook options tailored to crypto audiences  
+✔ opening video clips (3–5s)  
+✔ short explainer / launch video structure  
+✔ script & storyboard  
+✔ camera & motion direction  
+✔ text overlays & captions  
+✔ music & SFX suggestions  
+
+The user reviews, refines, and approves before final output.
 
 ---
 
@@ -57,144 +66,201 @@ The agent:
 
 **User provides:**
 
-- Topic / Product  
+- Announcement type  
+  (feature launch / partnership / product update / campaign)
 - Target audience  
-- Platform (TikTok / Reels / Shorts)  
-- Goal (sales / branding / education / entertainment)  
-- Brand tone  
+  (traders / DeFi users / whales / newcomers)
+- Platform  
+  (X / Telegram / Landing page / YouTube / TikTok)
+- Key message
+- Brand tone (professional / futuristic / bold)
 
-**Example**
+### Example Input
 
 | Field | Value |
 |------|------|
-| Product | Spicy snack |
-| Audience | Gen Z |
-| Platform | TikTok |
-| Goal | Sales |
-| Tone | Energetic & fun |
+| Update | New perpetual trading feature |
+| Audience | Active traders |
+| Platform | X + Telegram |
+| Goal | Increase feature adoption |
+| Tone | Bold & futuristic |
 
 ---
 
 ## 7. Output
 
-### 7.1. Viral Hooks
-✔ 5–10 scroll-stopping hook lines
+### A. Strategic Hook Options (5–7)
+
+Each hook includes reasoning:
+
+- hook line  
+- psychological trigger used  
+- why it fits crypto audience  
 
 ---
 
-### 7.2. Opening Videos (3–5 versions)
+### B. Opening Video Variations (3–5 versions)
+
+Each option follows a different strategy:
+
+| Option | Strategy | Purpose |
+|--------|----------|--------|
+| A | Curiosity gap | Trigger intrigue among traders |
+| B | Shock / bold claim | Emphasize major feature impact |
+| C | Speed & power visual | Highlight performance advantage |
+| D | Relatable pain point | Connect with trader frustrations |
 
 Each version includes:
 
-| Component | Description |
-|-----------|------------|
-| Video Clip | 3–5s vertical video (Veo 3) |
-| Scene | action, emotion, camera movement |
-| Text Overlay | suggested hook text placement |
-| Sound | SFX & music direction |
-| Trigger | psychological trigger used |
-
-**Triggers used:**
-- Curiosity gap  
-- Shock factor  
-- Relatability  
-- Pattern interrupt  
-- FOMO  
+- AI-generated 3–5s video clip  
+- scene & motion description  
+- text overlay suggestion  
+- sound & music direction  
 
 ---
 
-### 7.3. Retention Optimization Tips
-- when to reveal key info  
-- how to maintain viewer interest  
-- loop ending suggestions  
+### C. Explainer Video Structure (15–30s)
+
+- hook opening  
+- problem statement  
+- feature reveal  
+- benefit demonstration  
+- closing CTA  
 
 ---
 
-## 8. Hook Strategy Framework
+### D. Script & Storyboard
 
-The agent applies proven viral patterns:
+Includes:
 
-- Pattern Interrupt  
-- Curiosity Gap  
-- Shock Statement  
-- Relatable Scenario  
-- Problem–Agitate–Solve  
-- Before & After  
-- Myth Busting  
-- Bold Claim  
+- scene-by-scene breakdown  
+- camera direction  
+- motion & transitions  
+- visual emphasis points  
+
+---
+
+### E. Audio & Voice Direction
+
+- background music style  
+- SFX suggestions  
+- voice-over tone (if needed)  
+
+---
+
+## 8. Hook Strategy Logic
+
+The agent selects hook strategies based on:
+
+| Situation | Strategy |
+|----------|---------|
+| Major feature launch | Shock / bold claim |
+| Complex DeFi feature | Curiosity gap |
+| Competitive advantage | Speed & power visual |
+| User pain points | Relatable scenario |
+| Partnership announcement | Authority & credibility |
 
 ---
 
 ## 9. Workflow
 
-| Step | Action |
-|------|--------|
-| 1 | Analyze audience & insight |
-| 2 | Generate viral hooks |
-| 3 | Create opening concepts |
-| 4 | Generate Veo-optimized prompts |
-| 5 | Generate video via Veo 3 (Flow) |
-| 6 | Suggest text & sound |
-| 7 | Deliver multiple options |
+### Step 1 — Brief Analysis
+AI identifies:
+- audience mindset  
+- key value proposition  
+- emotional triggers  
+
+### Step 2 — Strategy Selection
+AI chooses hook strategies based on context and audience.
+
+### Step 3 — Hook & Concept Generation
+Generate multiple hook directions with reasoning.
+
+### Step 4 — Video & Storyboard Creation
+Generate:
+- opening video prompts  
+- storyboard  
+- motion & camera directions  
+
+### Step 5 — Video Generation (Veo 3 in Flow)
+Create cinematic opening clips.
+
+### Step 6 — Audio & Text Suggestions
+Provide overlay text and sound design.
+
+### Step 7 — Human-in-the-Loop Review
+User:
+- selects preferred option  
+- requests refinement  
+- mixes elements between options  
+
+AI iterates based on feedback.
 
 ---
 
-## 10. AI Tools
+## 10. Human-in-the-Loop Process
 
-**Content & analysis**
-- ChatGPT  
+The user reviews at:
+
+✔ hook selection stage  
+✔ visual direction approval  
+✔ final refinement  
+
+Users can:
+- request stronger tone  
+- combine elements from multiple options  
+- adjust for brand voice  
+
+---
+
+## 11. AI Tools
+
+**Primary LLM**
+- Claude (company-provided)  
+- ChatGPT (optional for advanced ideation & iteration)
 
 **Video generation**
 - Veo 3 inside Google Flow  
 
-**Final polish (optional)**
-- CapCut or editing software  
-
-**Voice (optional)**
-- ElevenLabs  
+**Final polish**
+- CapCut / Premiere / After Effects  
 
 ---
 
-## 11. Demo Scenario
+## 12. Demo Scenario (Company-Relevant)
 
 **Input:**  
-Spicy snack for Gen Z – TikTok sales video  
+Launch video for new DeFi trading feature
 
-**Output:**  
-✔ 7 viral hooks  
-✔ 4 opening videos  
-✔ text & sound suggestions  
-✔ retention tips  
+**Output:**
+- 6 strategic hooks  
+- 4 opening video variations  
+- 20s explainer structure  
+- storyboard & motion direction  
+- audio & text suggestions  
 
-User selects the best version → continues production.
+Ready for immediate use on X & Telegram.
 
 ---
 
-## 12. Before vs After
+## 13. Before vs After
 
 | Before | After |
 |--------|------|
-| Manual brainstorming | Hooks generated in minutes |
-| 1–2 ideas | Multiple options |
-| Slow production | Faster workflow |
-| Uncertain performance | Higher viral potential |
+| Static announcements | Dynamic video communication |
+| Slow video production | Rapid video generation |
+| Low engagement | Higher attention & clarity |
+| Manual ideation | Strategy-driven outputs |
 
 ---
 
-## 13. Business Value
+## 14. Business Value
 
-- Improve retention & watch time  
-- Increase ad effectiveness  
-- Accelerate content production  
-- Enable scalable video creation  
-- Improve viral potential  
-
----
-
-## 14. Future Expansion
-
-- Full short video generation    
-- Performance-based optimization  
+- improves launch engagement  
+- accelerates product communication  
+- simplifies complex features  
+- strengthens brand presence  
+- scales video content production  
 
 ---
 
@@ -202,10 +268,10 @@ User selects the best version → continues production.
 
 The agent succeeds when it:
 
-✓ generates ≥3 strong hooks  
-✓ produces usable opening videos  
-✓ applies correct psychological triggers  
-✓ matches social video format  
-✓ significantly speeds up workflow  
+✓ generates strategic, audience-aware hooks  
+✓ produces usable video openings  
+✓ explains strategy behind each option  
+✓ speeds up launch content creation  
+✓ can be used immediately in real workflows  
 
 ---
