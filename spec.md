@@ -1,277 +1,270 @@
-﻿# Crypto Video Hook & Launch Video Agent  
-**(AI Video Pipeline for Whales Market)**
+# AI Video Production Pipeline
+
+## Agent Spec — Nguyễn Ngọc Hoà (Brand Designer)
 
 ---
 
 ## 1. Overview
 
-In crypto and DeFi, attention is scarce and information is complex. Product launches, feature updates, and partnership announcements often fail to capture attention in the first seconds.
+**Agent Name:** AI Video Production Pipeline
 
-This agent generates **high-impact video hooks and short launch/explainer videos** optimized for crypto audiences. It helps transform complex product updates into engaging visual content that can be used immediately across X (Twitter), Telegram, landing pages, and social channels.
+**One-liner:** From 1 text brief → a complete 30–60s video (with motion, text overlay, music, voice-over) — with multiple creative directions for the user to choose from.
 
-Short 3–5 second openings also provide an immediate visual hook for content-heavy announcements, helping technical updates gain attention before deeper information is presented.
-
----
-
-## 2. Target Users
-
-- Whales Market marketing team  
-- Product & growth team  
-- Social media & community team  
-- Founder announcements & partnership comms  
+**Mindset:** You are the Creative Director. You don't edit video by hand — you review AI pipeline output, pick a direction, and refine until satisfied.
 
 ---
 
-## 3. Problem
+## 2. User & Problem
 
-| Current Issues | Impact |
-|----------------|--------|
-| Crypto updates are complex & technical | Hard to capture attention |
-| Announcements lack engaging openings | Low engagement |
-| Video production is slow | Missed momentum |
-| Messaging inconsistent across posts | Weak branding |
-| Difficult to explain features quickly | Low user understanding |
+### Who is the user?
 
----
+- Marketing teams needing videos for campaigns, product launches, social content
+- Brand teams needing video that maintains brand identity but lacking video production resources
+- Founders/PMs needing quick demo videos for pitches or idea validation
 
-## 4. Goal
+### What is the problem?
 
-Enable fast production of engaging crypto video content that:
+| Issue | Details |
+|-------|---------|
+| **Slow** | A 30s video takes 1–2 days manually (scriptwriting → storyboard → shoot/animate → edit → sound) |
+| **Resource-heavy** | Requires multiple skill sets: copywriter, motion designer, sound designer |
+| **Few options** | Usually only 1 version is produced, with long feedback loops |
+| **Hard to scale** | Need 5 videos for 5 platforms? Multiply time by 5x |
 
-- captures attention instantly  
-- simplifies complex features  
-- improves engagement on X & social channels  
-- accelerates product communication  
-- maintains strong brand consistency  
+### Solution
 
----
+1 brief → AI pipeline runs through each step automatically → produces 2–3 creative directions → each direction is a complete video → Human reviews and picks.
 
-## 5. Solution
-
-The agent analyzes a product or announcement brief and generates:
-
-✔ strategic hook options tailored to crypto audiences  
-✔ opening video clips (3–5s)  
-✔ short explainer / launch video structure  
-✔ script & storyboard  
-✔ camera & motion direction  
-✔ text overlays & captions  
-✔ music & SFX suggestions  
-
-The user reviews, refines, and approves before final output.
+**Time reduction:** from 1–2 days → down to 30–60 minutes.
 
 ---
 
-## 6. Input
+## 3. Input / Output
 
-**User provides:**
+### Input
 
-- Announcement type  
-  (feature launch / partnership / product update / campaign)
-- Target audience  
-  (traders / DeFi users / whales / newcomers)
-- Platform  
-  (X / Telegram / Landing page / YouTube / TikTok)
-- Key message
-- Brand tone (professional / futuristic / bold)
+```
+1 text or markdown brief, including:
+- What is the product/service
+- Video purpose (product launch, social content, ad, explainer...)
+- Target audience
+- Desired tone & mood (energetic, calm, premium, playful...)
+- Desired duration (15s / 30s / 60s)
+- Brand guideline (if available): color, font, logo
+- Reference video (if available): YouTube/TikTok link
+```
 
-### Example Input
+### Output
 
-| Field | Value |
-|------|------|
-| Update | New perpetual trading feature |
-| Audience | Active traders |
-| Platform | X + Telegram |
-| Goal | Increase feature adoption |
-| Tone | Bold & futuristic |
+```
+Each brief → 2–3 Creative Directions, each direction includes:
 
----
-
-## 7. Output
-
-### A. Strategic Hook Options (5–7)
-
-Each hook includes reasoning:
-
-- hook line  
-- psychological trigger used  
-- why it fits crypto audience  
+1. Complete script (voice-over text + on-screen text + timing)
+2. Storyboard (shot-by-shot visual description + prompt for AI video tool)
+3. Voice-over audio file (AI-generated)
+4. Background music track (AI-generated, mood-matched)
+5. Video clips for each shot (AI-generated)
+6. Final compiled video (with text overlay, music, VO)
+```
 
 ---
 
-### B. Opening Video Variations (3–5 versions)
+## 4. Step-by-Step Workflow
 
-Each option follows a different strategy:
-
-| Option | Strategy | Purpose |
-|--------|----------|--------|
-| A | Curiosity gap | Trigger intrigue among traders |
-| B | Shock / bold claim | Emphasize major feature impact |
-| C | Speed & power visual | Highlight performance advantage |
-| D | Relatable pain point | Connect with trader frustrations |
-
-Each version includes:
-
-- AI-generated 3–5s video clip  
-- scene & motion description  
-- text overlay suggestion  
-- sound & music direction  
-
----
-
-### C. Explainer Video Structure (15–30s)
-
-- hook opening  
-- problem statement  
-- feature reveal  
-- benefit demonstration  
-- closing CTA  
-
----
-
-### D. Script & Storyboard
-
-Includes:
-
-- scene-by-scene breakdown  
-- camera direction  
-- motion & transitions  
-- visual emphasis points  
-
----
-
-### E. Audio & Voice Direction
-
-- background music style  
-- SFX suggestions  
-- voice-over tone (if needed)  
-
----
-
-## 8. Hook Strategy Logic
-
-The agent selects hook strategies based on:
-
-| Situation | Strategy |
-|----------|---------|
-| Major feature launch | Shock / bold claim |
-| Complex DeFi feature | Curiosity gap |
-| Competitive advantage | Speed & power visual |
-| User pain points | Relatable scenario |
-| Partnership announcement | Authority & credibility |
-
----
-
-## 9. Workflow
-
-### Step 1 — Brief Analysis
-AI identifies:
-- audience mindset  
-- key value proposition  
-- emotional triggers  
-
-### Step 2 — Strategy Selection
-AI chooses hook strategies based on context and audience.
-
-### Step 3 — Hook & Concept Generation
-Generate multiple hook directions with reasoning.
-
-### Step 4 — Video & Storyboard Creation
-Generate:
-- opening video prompts  
-- storyboard  
-- motion & camera directions  
-
-### Step 5 — Video Generation (Veo 3 in Flow)
-Create cinematic opening clips.
-
-### Step 6 — Audio & Text Suggestions
-Provide overlay text and sound design.
-
-### Step 7 — Human-in-the-Loop Review
-User:
-- selects preferred option  
-- requests refinement  
-- mixes elements between options  
-
-AI iterates based on feedback.
+```
+┌─────────────────────────────────────────────────────┐
+│                    BRIEF INPUT                       │
+│            (text/markdown from user)                 │
+└─────────────────┬───────────────────────────────────┘
+                  │
+                  ▼
+┌─────────────────────────────────────────────────────┐
+│  STEP 1: CREATIVE DIRECTION (Claude/ChatGPT)        │
+│                                                      │
+│  - Analyze brief                                     │
+│  - Propose 2–3 creative directions                   │
+│  - Each direction: concept, mood, visual style,      │
+│    color palette, typography suggestion               │
+│                                                      │
+│  ★ CHECKPOINT 1: Human picks a direction             │
+└─────────────────┬───────────────────────────────────┘
+                  │
+                  ▼
+┌─────────────────────────────────────────────────────┐
+│  STEP 2: SCRIPT & STORYBOARD (Claude/ChatGPT)       │
+│                                                      │
+│  - Write script: VO text + on-screen text            │
+│  - Break into shots (4–8 shots for 30s)              │
+│  - Each shot: timing, visual description,            │
+│    camera movement, text overlay                     │
+│  - Generate optimized prompts for AI video tool      │
+│                                                      │
+│  ★ CHECKPOINT 2: Human reviews script & storyboard   │
+└─────────────────┬───────────────────────────────────┘
+                  │
+                  ▼
+┌─────────────────────────────────────────────────────┐
+│  STEP 3: ASSET GENERATION (Parallel)                 │
+│                                                      │
+│  3a. VIDEO CLIPS — Runway / Kling / Veo              │
+│      Use prompts from Step 2 → gen clip per shot     │
+│      Gen 2–3 variations per shot to choose from      │
+│                                                      │
+│  3b. VOICE-OVER — ElevenLabs                         │
+│      VO script → select voice matching tone          │
+│      Gen audio, adjust speed/emotion                 │
+│                                                      │
+│  3c. MUSIC — Suno / Udio                             │
+│      Gen background music matching mood + tempo      │
+│      Gen 2–3 tracks to choose from                   │
+│                                                      │
+│  ★ CHECKPOINT 3: Human reviews each asset            │
+└─────────────────┬───────────────────────────────────┘
+                  │
+                  ▼
+┌─────────────────────────────────────────────────────┐
+│  STEP 4: COMPILE & POLISH                            │
+│                                                      │
+│  - Assemble video clips on timeline                  │
+│  - Add text overlay (on-screen text from script)     │
+│  - Sync voice-over with visuals                      │
+│  - Layer background music                            │
+│  - Add transitions between shots                     │
+│  - Export final video                                │
+│                                                      │
+│  Tool: CapCut / DaVinci (or AI-assisted edit)        │
+│                                                      │
+│  ★ CHECKPOINT 4: Human reviews final → approve/refine│
+└─────────────────────────────────────────────────────┘
+```
 
 ---
 
-## 10. Human-in-the-Loop Process
+## 5. AI Tools Stack
 
-The user reviews at:
-
-✔ hook selection stage  
-✔ visual direction approval  
-✔ final refinement  
-
-Users can:
-- request stronger tone  
-- combine elements from multiple options  
-- adjust for brand voice  
-
----
-
-## 11. AI Tools
-
-**Primary LLM**
-- Claude (company-provided)  
-- ChatGPT (optional for advanced ideation & iteration)
-
-**Video generation**
-- Veo 3 inside Google Flow  
-
-**Final polish**
-- CapCut / Premiere / After Effects  
+| Step | Tool | Role |
+|------|------|------|
+| Creative Direction | **Claude / ChatGPT** | Analyze brief, propose concepts, write scripts |
+| Script & Storyboard | **Claude / ChatGPT** | Write detailed script, break into shots, generate prompts |
+| Video Generation | **Runway Gen-3** / **Kling** / **Veo 2** | Generate video clips from text prompts or image-to-video |
+| Image Reference | **Midjourney** / **DALL-E** | Generate reference images for style frames / key visuals |
+| Voice-Over | **ElevenLabs** | Natural-sounding text-to-speech |
+| Music | **Suno** / **Udio** | Generate background music by mood |
+| Compile & Edit | **CapCut** / **DaVinci Resolve** | Assemble video, text overlay, sync audio |
+| Text Overlay | **Claude** | Generate text animation spec / subtitle file (.srt) |
 
 ---
 
-## 12. Demo Scenario (Company-Relevant)
+## 6. Multi-Option Output (Critical!)
 
-**Input:**  
-Launch video for new DeFi trading feature
+The agent MUST generate multiple options at each key step:
 
-**Output:**
-- 6 strategic hooks  
-- 4 opening video variations  
-- 20s explainer structure  
-- storyboard & motion direction  
-- audio & text suggestions  
-
-Ready for immediate use on X & Telegram.
-
----
-
-## 13. Before vs After
-
-| Before | After |
-|--------|------|
-| Static announcements | Dynamic video communication |
-| Slow video production | Rapid video generation |
-| Low engagement | Higher attention & clarity |
-| Manual ideation | Strategy-driven outputs |
+| Step | # of Options | Human Decides |
+|------|-------------|---------------|
+| Creative Direction | 2–3 directions | Concept + mood + visual style |
+| Script | 1 (based on chosen direction) | Review & approve |
+| Video clip per shot | 2–3 variations | Best clip |
+| Voice | 2–3 different voices | Best-fitting voice |
+| Music | 2–3 tracks | Best-matching track |
+| Final video | 1 (compiled) | Approve or request refinement |
 
 ---
 
-## 14. Business Value
+## 7. Demo Scenario
 
-- improves launch engagement  
-- accelerates product communication  
-- simplifies complex features  
-- strengthens brand presence  
-- scales video content production  
+### Sample Brief for Demo
+
+```markdown
+## Video Brief: ClawFriend Launch
+
+- **Product:** ClawFriend — AI agent key trading platform on Telegram
+- **Purpose:** Product launch announcement video for social media
+- **Target:** Crypto traders, AI enthusiasts, Telegram users
+- **Tone:** Futuristic, energetic, premium yet accessible
+- **Duration:** 30 seconds
+- **Platform:** Twitter/X, Telegram channel
+- **Brand colors:** Refer to ClawFriend brand guideline
+- **Key message:** "Your AI agents now have skin in the game"
+- **CTA:** "Join the future of AI trading — Start on Telegram"
+```
+
+### Expected Demo Output
+
+1. Present 2–3 creative directions with different mood boards
+2. Show detailed script + storyboard for the chosen direction
+3. Play voice-over samples (2–3 voices)
+4. Play music samples (2–3 tracks)
+5. Play video clips for each shot
+6. **Play the final 30s complete video**
 
 ---
 
-## 15. Success Criteria
+## 8. Before vs. After
 
-The agent succeeds when it:
-
-✓ generates strategic, audience-aware hooks  
-✓ produces usable video openings  
-✓ explains strategy behind each option  
-✓ speeds up launch content creation  
-✓ can be used immediately in real workflows  
+| | Before (Manual) | After (AI Pipeline) |
+|---|---|---|
+| **Time** | 1–2 days | 30–60 minutes |
+| **Skills needed** | Copywriter + Motion designer + Sound designer | 1 person (Creative Director) |
+| **Options** | 1 version, long feedback loop | 2–3 directions, pick immediately |
+| **Scale** | 5 videos = 5–10 days | 5 videos = half a day |
+| **Cost** | Expensive freelancers/agency | AI tool subscription |
+| **Consistency** | Depends on individual | Brand guideline encoded in prompts |
 
 ---
+
+## 9. Scope Management (MVP for 4 Days)
+
+### Must Have (MVP)
+
+- [x] Step 1: AI proposes 2–3 creative directions from brief
+- [x] Step 2: AI writes detailed script + storyboard
+- [x] Step 3a: Generate video clips using Runway/Kling
+- [x] Step 3b: Generate voice-over using ElevenLabs
+- [x] Step 3c: Generate music using Suno
+- [x] Step 4: Compile into a complete video (can use CapCut)
+- [x] Live demo with a new brief
+
+### Nice to Have (If Time Permits)
+
+- [ ] Auto-compile without CapCut (using ffmpeg or API)
+- [ ] Auto-generate subtitle file (.srt) from script
+- [ ] Template prompt library for different video types
+- [ ] Batch generation: 1 brief → videos for multiple platforms (9:16, 16:9, 1:1)
+
+---
+
+## 10. Expansion Roadmap (For Q&A with Judges)
+
+**Phase 2:** Template library — pre-built prompt templates for each video type (product launch, testimonial, explainer, social content)
+
+**Phase 3:** Brand memory — agent remembers brand guidelines, no need to re-input every time
+
+**Phase 4:** Auto-compile — automatically assemble video via script, no need to open CapCut
+
+**Phase 5:** Multi-platform export — 1 source video → auto crop/resize for TikTok, Instagram, YouTube Shorts, Twitter
+
+---
+
+## 11. GitHub Repo Structure
+
+```
+ai-video-pipeline/
+├── README.md                         # Agent introduction
+├── spec.md                           # This file
+├── workflow/
+│   ├── step1-creative-direction.md   # Prompt template for Step 1
+│   ├── step2-script-storyboard.md    # Prompt template for Step 2
+│   ├── step3-asset-prompts.md        # Prompts for Runway/ElevenLabs/Suno
+│   └── step4-compile-guide.md        # Compile instructions
+├── output-samples/
+│   ├── direction-A/                  # Sample output direction A
+│   ├── direction-B/                  # Sample output direction B
+│   └── final-video/                  # Final video
+└── ai-showcase/
+    ├── prompt-screenshots/           # Screenshots of best prompts
+    └── conversation-links.md         # AI conversation links
+```
+
+---
+
+*Spec version 1.0 — Nguyễn Ngọc Hoà — Day 1*
