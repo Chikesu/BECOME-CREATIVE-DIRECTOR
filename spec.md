@@ -73,67 +73,67 @@ Each brief → 2–3 Creative Directions, each direction includes:
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│                    BRIEF INPUT                      │
-│            (text/markdown from user)                │
+│                    BRIEF INPUT                       │
+│            (text/markdown from user)                 │
 └─────────────────┬───────────────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────────────────────┐
 │  STEP 1: CREATIVE DIRECTION (Claude/ChatGPT)        │
-│                                                     │
-│  - Analyze brief                                    │
-│  - Propose 2–3 creative directions                  │
-│  - Each direction: concept, mood, visual style,     │
-│    color palette, typography suggestion             │
-│                                                     │
-│  ★ CHECKPOINT 1: Human picks a direction            │
+│                                                      │
+│  - Analyze brief                                     │
+│  - Propose 2–3 creative directions                   │
+│  - Each direction: concept, mood, visual style,      │
+│    color palette, typography suggestion               │
+│                                                      │
+│  ★ CHECKPOINT 1: Human picks a direction             │
 └─────────────────┬───────────────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────────────────────┐
 │  STEP 2: SCRIPT & STORYBOARD (Claude/ChatGPT)       │
-│                                                     │
-│  - Write script: VO text + on-screen text           │
-│  - Break into shots (4–8 shots for 30s)             │
-│  - Each shot: timing, visual description,           │
-│    camera movement, text overlay                    │
-│  - Generate optimized prompts for AI video tool     │
-│                                                     │
-│  ★ CHECKPOINT 2: Human reviews script & storyboard  │
+│                                                      │
+│  - Write script: VO text + on-screen text            │
+│  - Break into shots (4–8 shots for 30s)              │
+│  - Each shot: timing, visual description,            │
+│    camera movement, text overlay                     │
+│  - Generate optimized prompts for AI video tool      │
+│                                                      │
+│  ★ CHECKPOINT 2: Human reviews script & storyboard   │
 └─────────────────┬───────────────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────────────────────┐
-│  STEP 3: ASSET GENERATION (Parallel)                │
-│                                                     │
-│  3a. VIDEO CLIPS — Runway / Kling / Veo             │
-│      Use prompts from Step 2 → gen clip per shot    │
-│      Gen 2–3 variations per shot to choose from     │
-│                                                     │
-│  3b. VOICE-OVER — ElevenLabs                        │
-│      VO script → select voice matching tone         │
-│      Gen audio, adjust speed/emotion                │
-│                                                     │
-│  3c. MUSIC — Suno / Udio                            │
-│      Gen background music matching mood + tempo     │
-│      Gen 2–3 tracks to choose from                  │
-│                                                     │
-│  ★ CHECKPOINT 3: Human reviews each asset           │
+│  STEP 3: ASSET GENERATION (Parallel)                 │
+│                                                      │
+│  3a. VIDEO CLIPS — Runway / Kling / Veo              │
+│      Use prompts from Step 2 → gen clip per shot     │
+│      Gen 2–3 variations per shot to choose from      │
+│                                                      │
+│  3b. VOICE-OVER — ElevenLabs                         │
+│      VO script → select voice matching tone          │
+│      Gen audio, adjust speed/emotion                 │
+│                                                      │
+│  3c. MUSIC — Suno / Udio                             │
+│      Gen background music matching mood + tempo      │
+│      Gen 2–3 tracks to choose from                   │
+│                                                      │
+│  ★ CHECKPOINT 3: Human reviews each asset            │
 └─────────────────┬───────────────────────────────────┘
                   │
                   ▼
 ┌─────────────────────────────────────────────────────┐
-│  STEP 4: COMPILE & POLISH                           │
-│                                                     │
-│  - Assemble video clips on timeline                 │
-│  - Add text overlay (on-screen text from script)    │
-│  - Sync voice-over with visuals                     │
-│  - Layer background music                           │
-│  - Add transitions between shots                    │
-│  - Export final video                               │
-│                                                     │
-│  Tool: CapCut / DaVinci (or AI-assisted edit)       │
-│                                                     │
+│  STEP 4: COMPILE & POLISH                            │
+│                                                      │
+│  - Assemble video clips on timeline                  │
+│  - Add text overlay (on-screen text from script)     │
+│  - Sync voice-over with visuals                      │
+│  - Layer background music                            │
+│  - Add transitions between shots                     │
+│  - Export final video                                │
+│                                                      │
+│  Tool: CapCut / DaVinci (or AI-assisted edit)        │
+│                                                      │
 │  ★ CHECKPOINT 4: Human reviews final → approve/refine│
 └─────────────────────────────────────────────────────┘
 ```
@@ -175,17 +175,17 @@ The agent MUST generate multiple options at each key step:
 ### Sample Brief for Demo
 
 ```markdown
-## Video Brief: ClawFriend Launch
+## Video Brief: Whales Market Launch
 
-- **Product:** ClawFriend — AI agent key trading platform on Telegram
+- **Product:** Whales Market — Crypto pre-market trading platform
 - **Purpose:** Product launch announcement video for social media
-- **Target:** Crypto traders, AI enthusiasts, Telegram users
-- **Tone:** Futuristic, energetic, premium yet accessible
+- **Target:** Crypto traders, DeFi users, early-stage token investors
+- **Tone:** Bold, futuristic, premium, high-stakes energy
 - **Duration:** 30 seconds
 - **Platform:** Twitter/X, Telegram channel
-- **Brand colors:** Refer to ClawFriend brand guideline
-- **Key message:** "Your AI agents now have skin in the game"
-- **CTA:** "Join the future of AI trading — Start on Telegram"
+- **Brand colors:** Refer to Whales Market brand guideline
+- **Key message:** "Trade the future before it hits the market"
+- **CTA:** "Start trading pre-market now — whales.market"
 ```
 
 ### Expected Demo Output
