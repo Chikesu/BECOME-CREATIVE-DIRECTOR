@@ -35,7 +35,7 @@ Increase video performance by:
 - Improving retention & watch time  
 - Increasing completion rate  
 - Speeding up creative workflow  
-- Enabliнг quick testing of multiple directions  
+- Enabling quick testing of multiple directions  
 
 ---
 
