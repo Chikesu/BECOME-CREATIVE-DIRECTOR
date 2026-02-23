@@ -76,12 +76,12 @@ The agent:
 
 ## 7. Output
 
-### A. Viral Hooks
+### 7.1. Viral Hooks
 ✔ 5–10 scroll-stopping hook lines
 
 ---
 
-### B. Opening Videos (3–5 versions)
+### 7.2. Opening Videos (3–5 versions)
 
 Each version includes:
 
@@ -102,7 +102,7 @@ Each version includes:
 
 ---
 
-### C. Retention Optimization Tips
+### 7.3. Retention Optimization Tips
 - when to reveal key info  
 - how to maintain viewer interest  
 - loop ending suggestions  
