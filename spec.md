@@ -141,7 +141,7 @@ The agent applies proven viral patterns:
 ## 10. AI Tools
 
 **Content & analysis**
-- ChatGPT / Claude  
+- ChatGPT  
 
 **Video generation**
 - Veo 3 inside Google Flow  
@@ -192,10 +192,8 @@ User selects the best version → continues production.
 
 ## 14. Future Expansion
 
-- Full short video generation  
-- Hook A/B testing automation  
+- Full short video generation    
 - Performance-based optimization  
-- Platform-specific tuning  
 
 ---
 
@@ -203,7 +201,7 @@ User selects the best version → continues production.
 
 The agent succeeds when it:
 
-✓ generates ≥5 strong hooks  
+✓ generates ≥3 strong hooks  
 ✓ produces usable opening videos  
 ✓ applies correct psychological triggers  
 ✓ matches social video format  
