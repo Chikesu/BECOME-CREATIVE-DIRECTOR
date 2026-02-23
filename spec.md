@@ -6,6 +6,7 @@
 ## 1. Overview
 The first 3 seconds determine whether viewers keep watching or scroll away.  
 This agent generates **viral hooks** and automatically creates **3–5 second opening videos** to maximize retention and speed up video production.
+These 3–5 second openings also enhance social posts by adding an immediate visual hook to content that is informative but lacks initial attention-grabbing impact.
 
 ---
 
