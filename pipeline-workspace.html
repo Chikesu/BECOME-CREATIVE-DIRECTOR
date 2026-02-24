@@ -151,7 +151,7 @@ const STEPS=[
   {id:"video",n:"4A",title:"Video Clips",sub:"Copy Veo 3 prompts \u2192 open Google Flow \u2192 generate clips",color:"#00D4FF",tool:"Google Flow",url:"https://labs.google/fx/tools/flow",type:"select",int:"copy",btn:"\uD83D\uDCCB Copy Prompts & Open Flow",par:true},
   {id:"voice",n:"4B",title:"Voice-Over",sub:"ElevenLabs generates audio directly here — compare voices",color:"#00FF88",tool:"ElevenLabs",url:"https://elevenlabs.io",type:"select",int:"eleven",btn:"\uD83C\uDFA4 Generate Voice-Over",par:true},
   {id:"music",n:"4C",title:"Music",sub:"Copy Suno prompts \u2192 open Suno \u2192 generate tracks",color:"#A855F7",tool:"Suno",url:"https://suno.com",type:"select",int:"copy",btn:"\uD83D\uDCCB Copy Prompts & Open Suno",par:true},
-  {id:"comp",n:"05",title:"Compile & Polish",sub:"Assemble in After Effects \u2014 video + VO + music + text + transitions",color:"#FF8A00",tool:"After Effects",type:"single",int:"none"},
+  {id:"comp",n:"05",title:"Compile & Polish",sub:"Assemble in After Effects \u2014 video + VO + music + text + transitions",color:"#FF8A00",tool:"After Effects",type:"single",int:"ae-script"},
 ];
 
 let S=ld()||STEPS.map(s=>({id:s.id,pr:'',out:[],sel:null,done:false,exp:true,revs:[],imgs:[]}));
@@ -566,7 +566,8 @@ async function gen(i){
     else if(st.int==='claude-prompts'){
       const scr=S[2].out[S[2].sel]?.text||'';
       if(!scr)throw new Error('Finalize script first');
-      const res=await callC('Based on this finalized script, generate ALL three sections below. Use EXACTLY the separator lines shown.\n\n===VEO===\nFor each shot, write "Shot N:" then an optimized Veo 3 prompt (max 150 words): visual style, scene, camera movement, lighting, color grading, audio direction. One shot per paragraph.\n\n===VO===\nFull compiled voice-over script. Clean text only. Use ... for pauses, [emphasis] for stress, [pause] for beats.\n\n===SUNO===\n2-3 music prompts: genre, BPM, mood, instruments. Include [instrumental].\n\nIMPORTANT: You MUST include all three separator lines (===VEO===, ===VO===, ===SUNO===) exactly as shown.\n\nSCRIPT:\n'+scr+'\n\nBRIEF:\n'+S[0].pr);
+      const dirText=S[1].sel!==null?S[1].out[S[1].sel]?.text||'':'';
+      const res=await callC('Based on the finalized script and creative direction, generate ALL three sections below. Use EXACTLY the separator lines shown.\n\n===VEO===\nFor EACH shot, write "Shot N:" then a Veo 3 optimized prompt following this EXACT structure (100-150 words each):\n\n1. SHOT TYPE & SUBJECT: Start with camera framing (extreme close-up, medium wide, etc.) and main subject\n2. ACTION: One clear action per shot. Keep it simple.\n3. SCENE & ENVIRONMENT: Specific setting details, props, textures\n4. CAMERA MOVEMENT: One specific move (slow dolly-in, lateral tracking left, static tripod, etc.)\n5. LIGHTING: Specific setup (key light position, color temperature, natural/artificial)\n6. COLOR & GRADE: Specific palette and grading style (teal-orange, desaturated blue, etc.)\n7. AUDIO: Ambient sounds and SFX cues\n8. End EVERY prompt with: "No subtitles, no text overlays, no watermarks."\n\nCRITICAL FOR CONSISTENCY: Every shot MUST repeat these shared visual anchors:\n- Same color palette/grading across all shots\n- Same lighting style (key light direction, color temp)\n- Same lens/focal length feel\n- Same overall aesthetic/texture\nWrite prompts as flowing paragraphs, NOT bullet lists.\n\n===VO===\nFull compiled voice-over script. Clean text only. Use ... for pauses, [emphasis] for stress, [pause] for beats. No stage directions.\n\n===SUNO===\n2-3 music track options. For each write "Track N:" then: genre, BPM, mood, instruments, duration hint. End each with [instrumental].\n\nIMPORTANT: You MUST include all three separator lines (===VEO===, ===VO===, ===SUNO===) exactly as shown.\n\nCREATIVE DIRECTION:\n'+dirText+'\n\nSCRIPT:\n'+scr+'\n\nBRIEF:\n'+S[0].pr);
       s.out=[{text:res,id:Date.now()}];s.sel=0;
       // Parse by separators
       const veo=exBySep(res,'VEO');
@@ -581,6 +582,24 @@ async function gen(i){
       if(!txt)throw new Error('No VO script \u2014 complete Step 03');
       s.pr=txt;const url=await callE(txt);
       s.out.push({text:'\uD83C\uDFA4 Voice-Over Audio',id:Date.now(),au:url});
+    }
+    else if(st.int==='ae-script'){
+      // Gather data from pipeline
+      const scriptRows=parseScript(S[2].out[S[2].sel||0]?.text||'');
+      if(!scriptRows.length)throw new Error('Finalize script in Step 02 first');
+      const shots=S[4].shots||[];
+      const hasVO=S[5].out.some(o=>o.au);
+      const hasMu=S[6].tracks&&S[6].tracks.length;
+      const jsx=genAEScript(scriptRows,shots,hasVO,hasMu);
+      // Download as .jsx file
+      const blob=new Blob([jsx],{type:'text/plain'});
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download='pipeline-assembly.jsx';a.click();
+      URL.revokeObjectURL(url);
+      s.out=[{text:'\u2705 AE Script Generated & Downloaded\n\nOpen After Effects \u2192 File \u2192 Scripts \u2192 Run Script File \u2192 select pipeline-assembly.jsx\n\nThe script will:\n\u2022 Create a '+scriptRows.length+'-shot composition\n\u2022 Import files from your project folder\n\u2022 Place shots on timeline with transitions\n\u2022 Add VO + Music layers\n\u2022 Add text overlays from script',id:Date.now()}];
+      s.sel=0;
+      toast('\u2713 AE Script downloaded!');
+      LD[i]=false;sv();render();return;
     }
     else if(st.int==='copy'){
       const kw=st.id==='video'?'Veo':'Suno';
@@ -634,6 +653,8 @@ function render(){
       aBtn='<button class="bgn" onclick="event.stopPropagation();gen('+i+')" style="background:'+st.color+';color:#08090E" '+(il?'disabled':'')+'>'+(il?'<span class="sp"></span> Generating...':st.btn)+'</button>';
     else if(st.int==='copy')
       aBtn='<button class="bcp" onclick="event.stopPropagation();gen('+i+')" style="border:1px solid '+st.color+'50;color:'+st.color+'">'+st.btn+'</button>';
+    else if(st.int==='ae-script')
+      aBtn='<button class="bgn" onclick="event.stopPropagation();gen('+i+')" style="background:'+st.color+';color:#08090E" '+(il?'disabled':'')+'>'+(il?'<span class="sp"></span> Generating...':'\u26A1 Generate AE Assembly Script')+'</button>';
 
     // Body content based on type
     let bodyContent='';
@@ -687,6 +708,33 @@ function render(){
       bodyContent+='<button class="bcp" onclick="event.stopPropagation();gen('+i+')" style="border:1px solid var(--purple);color:var(--purple);margin-top:4px">\uD83D\uDCCB Copy ALL Prompts & Open Suno</button></div>';
       if(s.error)bodyContent+='<div class="er">\u26A0 '+esc(s.error)+'</div>';
       bodyContent+='<div class="ar"><textarea id="no-'+i+'" rows="2" placeholder="Add manually..."></textarea><button class="ba" onclick="addO('+i+')" style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:var(--purple)">+ Add</button></div>';
+    }
+    else if(st.id==='comp'){
+      const scriptRows=parseScript(S[2].out[S[2].sel||0]?.text||'');
+      const numShots=scriptRows.length||'?';
+      const hasVO=S[5].out.some(o=>o.au);
+      const hasMu=S[6].tracks&&S[6].tracks.length;
+      bodyContent='<div style="margin-bottom:14px">';
+      bodyContent+='<div style="padding:14px;border-radius:10px;background:var(--inp);border:1px solid var(--bdr);margin-bottom:14px"><div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:600;color:var(--orange);margin-bottom:10px">\uD83D\uDCC1 SETUP YOUR PROJECT FOLDER</div><div style="font-size:12px;color:var(--t2);line-height:2;font-family:\'JetBrains Mono\',monospace">';
+      bodyContent+='<div style="color:var(--t3);font-size:10px;margin-bottom:4px">Create this structure, then hit Generate:</div>';
+      bodyContent+='<div style="padding:10px;background:rgba(0,0,0,.3);border-radius:8px;border:1px solid rgba(255,138,0,.15)">';
+      bodyContent+='<div>\uD83D\uDCC2 project/</div>';
+      bodyContent+='<div style="padding-left:20px">\uD83D\uDCC2 shot/ <span style="color:var(--t3)">\u2190 shot_1.mp4, shot_2.mp4...</span></div>';
+      bodyContent+='<div style="padding-left:20px">\uD83D\uDCC2 voice/ <span style="color:var(--t3)">\u2190 voiceover.mp3</span></div>';
+      bodyContent+='<div style="padding-left:20px">\uD83D\uDCC2 music/ <span style="color:var(--t3)">\u2190 music.mp3</span></div>';
+      bodyContent+='<div style="padding-left:20px">\uD83D\uDCC2 assets/ <span style="color:var(--t3)">\u2190 logo.png, brand files</span></div>';
+      bodyContent+='</div></div></div>';
+      bodyContent+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">';
+      bodyContent+='<span style="padding:4px 10px;border-radius:6px;font-size:10px;font-family:\'JetBrains Mono\',monospace;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--cyan)">\uD83C\uDFAC '+numShots+' Shots</span>';
+      bodyContent+='<span style="padding:4px 10px;border-radius:6px;font-size:10px;font-family:\'JetBrains Mono\',monospace;background:'+(hasVO?'rgba(0,255,136,.1)':'rgba(255,138,0,.1)')+';border:1px solid '+(hasVO?'rgba(0,255,136,.3)':'rgba(255,138,0,.3)')+';color:'+(hasVO?'var(--green)':'var(--orange)')+'">'+(hasVO?'\u2713':'\u26A0')+' Voice-Over</span>';
+      bodyContent+='<span style="padding:4px 10px;border-radius:6px;font-size:10px;font-family:\'JetBrains Mono\',monospace;background:'+(hasMu?'rgba(168,85,247,.1)':'rgba(255,138,0,.1)')+';border:1px solid '+(hasMu?'rgba(168,85,247,.3)':'rgba(255,138,0,.3)')+';color:'+(hasMu?'var(--purple)':'var(--orange)')+'">'+(hasMu?'\u2713':'\u26A0')+' Music</span>';
+      bodyContent+='</div>';
+      bodyContent+=aBtn+'</div>';
+      if(s.error)bodyContent+='<div class="er">\u26A0 '+esc(s.error)+'</div>';
+      if(s.out.length){
+        const items=s.out.map((o,j)=>'<div class="oi" style="border-color:var(--orange)20;background:rgba(255,138,0,.03)"><div style="flex:1"><div class="ol" style="color:var(--orange)">Result</div><div class="ot" style="white-space:pre-wrap">'+esc(o.text)+'</div></div><button class="rm" onclick="event.stopPropagation();rmOut('+i+','+j+')">'+svgDel()+'</button></div>').join('');
+        bodyContent+='<div><div class="lbl"><span>OUTPUT</span></div>'+items+'</div>';
+      }
     }
     else{
       // single / select types
@@ -759,6 +807,237 @@ function parseSunoTracks(text){
   const paras=text.split(/\n\n+/).filter(p=>p.trim().length>20);
   if(paras.length>=2)return paras.map((p,i)=>({label:'Track '+(i+1),prompt:p.trim()}));
   return[{label:'All Tracks',prompt:text.trim()}];
+}
+
+function genAEScript(rows, shots, hasVO, hasMu){
+  // Parse durations from script table rows
+  const durArr=rows.map(r=>{
+    const m=r.d.match(/(\d+)/);return m?parseFloat(m[1]):4;
+  });
+  const totalDur=durArr.reduce((a,b)=>a+b,0);
+  const fps=30;
+  const w=1920;const h=1080;
+  const transDur=0.5; // cross dissolve duration in seconds
+
+  let jsx=`// ============================================
+// AI VIDEO PIPELINE — After Effects Assembly Script
+// Generated by Pipeline Workspace v7
+// ============================================
+// 
+// INSTRUCTIONS:
+// 1. Place your files in a project folder:
+//    📂 project/
+//    ├── 📂 shot/     ← shot_1.mp4, shot_2.mp4...
+//    ├── 📂 voice/    ← voiceover.mp3 (or .wav)
+//    ├── 📂 music/    ← music.mp3 (or .wav)
+//    └── 📂 assets/   ← logo.png, etc.
+//
+// 2. Open After Effects
+// 3. File → Scripts → Run Script File → select this .jsx
+// 4. Select your project folder when prompted
+// ============================================
+
+(function(){
+  // --- CONFIG ---
+  var COMP_NAME = "Pipeline_Assembly";
+  var COMP_W = ${w};
+  var COMP_H = ${h};
+  var COMP_FPS = ${fps};
+  var COMP_DUR = ${totalDur + 2}; // +2s padding
+  var TRANS_DUR = ${transDur};
+  var NUM_SHOTS = ${rows.length};
+  
+  // Shot durations from script (seconds)
+  var shotDurs = [${durArr.join(',')}];
+
+  // On-screen text from script
+  var shotTexts = [${rows.map(r=>JSON.stringify(r.o||'')).join(',')}];
+
+  // --- FOLDER PICKER ---
+  var projFolder = Folder.selectDialog("Select your project folder (containing shot/, voice/, music/, assets/)");
+  if(!projFolder){ alert("Cancelled."); return; }
+  var shotFolder = new Folder(projFolder.fsName + "/shot");
+  var voiceFolder = new Folder(projFolder.fsName + "/voice");
+  var musicFolder = new Folder(projFolder.fsName + "/music");
+  var assetsFolder = new Folder(projFolder.fsName + "/assets");
+
+  // --- HELPERS ---
+  function getFiles(folder, exts){
+    if(!folder.exists) return [];
+    var all = folder.getFiles();
+    var filtered = [];
+    for(var i=0;i<all.length;i++){
+      var f = all[i];
+      if(f instanceof File){
+        var ext = f.name.split('.').pop().toLowerCase();
+        for(var e=0;e<exts.length;e++){
+          if(ext===exts[e]){filtered.push(f);break;}
+        }
+      }
+    }
+    // Sort by name
+    filtered.sort(function(a,b){return a.name.localeCompare(b.name)});
+    return filtered;
+  }
+
+  function importFile(f){
+    var io = new ImportOptions(f);
+    return app.project.importFile(io);
+  }
+
+  app.beginUndoGroup("Pipeline Assembly");
+
+  // --- CREATE COMP ---
+  var comp = app.project.items.addComp(COMP_NAME, COMP_W, COMP_H, 1, COMP_DUR, COMP_FPS);
+
+  // --- IMPORT & PLACE SHOTS ---
+  var shotFiles = getFiles(shotFolder, ["mp4","mov","avi","webm","mkv"]);
+  var timeline = 0;
+
+  // Create shot layers
+  for(var i=0; i<Math.min(shotFiles.length, NUM_SHOTS); i++){
+    var footage = importFile(shotFiles[i]);
+    var layer = comp.layers.add(footage);
+    layer.startTime = timeline;
+    
+    // Trim to script duration
+    var dur = (i < shotDurs.length) ? shotDurs[i] : 4;
+    layer.outPoint = timeline + dur;
+    
+    // Add cross dissolve (opacity fade) except first shot
+    if(i > 0 && TRANS_DUR > 0){
+      layer.opacity.setValueAtTime(timeline, 0);
+      layer.opacity.setValueAtTime(timeline + TRANS_DUR, 100);
+    }
+    // Fade out at end except last shot
+    if(i < Math.min(shotFiles.length, NUM_SHOTS) - 1 && TRANS_DUR > 0){
+      layer.opacity.setValueAtTime(timeline + dur - TRANS_DUR, 100);
+      layer.opacity.setValueAtTime(timeline + dur, 0);
+    }
+    
+    // Scale to fit comp
+    var sw = footage.width; var sh = footage.height;
+    if(sw > 0 && sh > 0){
+      var scaleX = (COMP_W / sw) * 100;
+      var scaleY = (COMP_H / sh) * 100;
+      var scale = Math.max(scaleX, scaleY);
+      layer.transform.scale.setValue([scale, scale]);
+    }
+    
+    layer.name = "Shot_" + (i+1);
+    timeline += dur;
+  }
+
+  // --- IMPORT & PLACE VOICE-OVER ---
+  var voFiles = getFiles(voiceFolder, ["mp3","wav","aac","m4a"]);
+  if(voFiles.length > 0){
+    var voFootage = importFile(voFiles[0]);
+    var voLayer = comp.layers.add(voFootage);
+    voLayer.startTime = 0;
+    voLayer.name = "Voice_Over";
+    voLayer.audioEnabled = true;
+    // Move to bottom of layer stack
+    voLayer.moveToEnd();
+  }
+
+  // --- IMPORT & PLACE MUSIC ---
+  var muFiles = getFiles(musicFolder, ["mp3","wav","aac","m4a"]);
+  if(muFiles.length > 0){
+    var muFootage = importFile(muFiles[0]);
+    var muLayer = comp.layers.add(muFootage);
+    muLayer.startTime = 0;
+    muLayer.name = "Music_BG";
+    muLayer.audioEnabled = true;
+    // Lower music volume (-12dB) so VO is clear
+    muLayer.audio.audioLevels.setValue([-12, -12]);
+    // Fade out music at end
+    var fadeStart = Math.max(0, timeline - 2);
+    muLayer.audio.audioLevels.setValueAtTime(fadeStart, [-12, -12]);
+    muLayer.audio.audioLevels.setValueAtTime(timeline, [-48, -48]);
+    muLayer.outPoint = timeline;
+    muLayer.moveToEnd();
+  }
+
+  // --- ADD ON-SCREEN TEXT OVERLAYS ---
+  var textTimeline = 0;
+  for(var t=0; t<shotTexts.length; t++){
+    var txt = shotTexts[t];
+    if(txt && txt.length > 0 && txt !== "-" && txt !== "N/A" && txt !== "None"){
+      var textLayer = comp.layers.addText(txt);
+      textLayer.startTime = textTimeline;
+      var dur2 = (t < shotDurs.length) ? shotDurs[t] : 4;
+      textLayer.outPoint = textTimeline + dur2;
+      textLayer.name = "Text_Shot_" + (t+1);
+      
+      // Style the text
+      var textProp = textLayer.property("Source Text");
+      var textDoc = textProp.value;
+      textDoc.fontSize = 42;
+      textDoc.fillColor = [1, 1, 1]; // white
+      textDoc.strokeColor = [0, 0, 0]; // black stroke
+      textDoc.strokeWidth = 2;
+      textDoc.font = "Arial";
+      textDoc.justification = ParagraphJustification.CENTER_JUSTIFY;
+      textProp.setValue(textDoc);
+      
+      // Position at lower third
+      textLayer.transform.position.setValue([COMP_W/2, COMP_H * 0.85]);
+      
+      // Fade in/out
+      textLayer.opacity.setValueAtTime(textTimeline, 0);
+      textLayer.opacity.setValueAtTime(textTimeline + 0.3, 100);
+      textLayer.opacity.setValueAtTime(textTimeline + dur2 - 0.3, 100);
+      textLayer.opacity.setValueAtTime(textTimeline + dur2, 0);
+      
+      // Move text layer to top
+      textLayer.moveToBeginning();
+    }
+    textTimeline += (t < shotDurs.length) ? shotDurs[t] : 4;
+  }
+
+  // --- IMPORT LOGO FROM ASSETS ---
+  var logoFiles = getFiles(assetsFolder, ["png","jpg","jpeg","svg"]);
+  if(logoFiles.length > 0){
+    var logoFootage = importFile(logoFiles[0]);
+    var logoLayer = comp.layers.add(logoFootage);
+    logoLayer.startTime = 0;
+    logoLayer.outPoint = timeline;
+    logoLayer.name = "Logo_Watermark";
+    // Scale logo to ~8% of comp width
+    var lw = logoFootage.width;
+    if(lw > 0){
+      var logoScale = (COMP_W * 0.08 / lw) * 100;
+      logoLayer.transform.scale.setValue([logoScale, logoScale]);
+    }
+    // Position top-right corner with padding
+    logoLayer.transform.position.setValue([COMP_W - 80, 60]);
+    logoLayer.opacity.setValue(70);
+    logoLayer.moveToBeginning();
+  }
+
+  // --- SET WORK AREA ---
+  comp.workAreaStart = 0;
+  comp.workAreaDuration = timeline;
+
+  app.endUndoGroup();
+
+  // --- SUMMARY ---
+  var summary = "✅ Pipeline Assembly Complete!\\n\\n";
+  summary += "Composition: " + COMP_NAME + "\\n";
+  summary += "Duration: " + timeline + "s @ " + COMP_FPS + "fps\\n";
+  summary += "Resolution: " + COMP_W + "x" + COMP_H + "\\n\\n";
+  summary += "Layers created:\\n";
+  summary += "• " + Math.min(shotFiles.length, NUM_SHOTS) + " video shots (with cross dissolves)\\n";
+  summary += "• " + (voFiles.length > 0 ? "1" : "0") + " voice-over track\\n";
+  summary += "• " + (muFiles.length > 0 ? "1" : "0") + " music track (ducked -12dB)\\n";
+  summary += "• Text overlays on applicable shots\\n";
+  summary += "• " + (logoFiles.length > 0 ? "1 logo watermark" : "No logo found") + "\\n\\n";
+  summary += "Next: Review timeline, adjust timing, add effects, render!";
+  alert(summary);
+
+})();
+`;
+  return jsx;
 }
 function upPr(i,v){S[i].pr=v;delete S[i].error;sv()}
 function selOut(i,j){S[i].sel=j;sv();render()}
