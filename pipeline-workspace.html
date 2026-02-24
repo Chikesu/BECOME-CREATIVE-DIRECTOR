@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Video Pipeline — Workspace</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#08090E;--card:#111320;--bdr:#1E2235;--inp:#0C0E18;--blue:#4A9EFF;--cyan:#00D4FF;--green:#00FF88;--purple:#A855F7;--orange:#FF8A00;--pink:#FF3366;--t1:#E8ECF4;--t2:#7A8299;--t3:#4A5068}
+body{background:var(--bg);color:var(--t1);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(var(--bdr) 1px,transparent 1px),linear-gradient(90deg,var(--bdr) 1px,transparent 1px);background-size:60px 60px;opacity:.08;pointer-events:none}
+.wrap{max-width:860px;margin:0 auto;padding:36px 20px 100px;position:relative;z-index:1}
+.lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:6px}
+.htag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px;opacity:.7}
+.hrow{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px}
+h1{font-size:26px;font-weight:700;letter-spacing:-.5px;color:var(--t1)}
+.hrow p{font-size:13px;color:var(--t2);margin-top:6px}
+.stog{font-family:'JetBrains Mono',monospace;font-size:10px;padding:6px 14px;border-radius:8px;border:1px solid var(--bdr);background:var(--card);color:var(--t2);cursor:pointer;margin-top:14px}
+.stog:hover{border-color:var(--blue);color:var(--blue)}
+.span{margin-top:10px;padding:16px 18px;border-radius:12px;background:var(--card);border:1px solid var(--bdr);display:none}
+.span.open{display:block}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.sg .c{display:flex;flex-direction:column;gap:4px}
+.sg input{width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--bdr);background:var(--inp);color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none}
+.sg input:focus{border-color:var(--blue)}
+.kr{display:flex;gap:6px}.kr input{flex:1}
+.bs{padding:6px 10px;border-radius:6px;border:1px solid var(--bdr);background:transparent;color:var(--t2);cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:10px;white-space:nowrap}
+.bs:hover{border-color:var(--blue);color:var(--blue)}
+.ks{font-family:'JetBrains Mono',monospace;font-size:10px;margin-top:4px}
+.prog{margin:20px 0 30px}
+.phdr{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3);margin-bottom:6px;letter-spacing:1px}
+.pbar{width:100%;height:4px;background:var(--bdr);border-radius:2px;overflow:hidden}
+.pfil{height:100%;border-radius:2px;transition:width .5s}
+.bres{font-family:'JetBrains Mono',monospace;font-size:10px;padding:6px 14px;border-radius:6px;border:1px solid #2A3050;background:transparent;color:var(--t3);cursor:pointer}
+.bres:hover{border-color:var(--pink);color:var(--pink)}
+.arw{display:flex;flex-direction:column;align-items:center;padding:6px 0}
+.plbl{text-align:center;margin:4px 0 14px}
+.plbl span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--cyan);background:var(--bg);padding:4px 14px;border:1px solid rgba(0,212,255,.2);border-radius:20px}
+.cd{background:var(--card);border:1px solid var(--bdr);border-radius:14px;overflow:hidden;transition:all .3s}
+.cd.dn{background:rgba(0,255,136,.03);border-color:rgba(0,255,136,.2)}
+.cd.lk{opacity:.3;pointer-events:none}
+.ch{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none}
+.ch:hover{background:rgba(255,255,255,.01)}
+.bg{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:1px;padding:3px 11px;border-radius:14px;flex-shrink:0}
+.ci{flex:1;min-width:0}.ct{font-size:15px;font-weight:600}.cs{font-size:11px;color:var(--t2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ca{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tl{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:6px;text-decoration:none;display:flex;align-items:center;gap:5px}
+.tl:hover{filter:brightness(1.3)}
+.tt{font-family:'JetBrains Mono',monospace;font-size:10px;padding:4px 10px;border-radius:6px}
+.bd{width:26px;height:26px;border-radius:7px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bd.on{border:1px solid rgba(0,255,136,.4);background:rgba(0,255,136,.15);color:var(--green)}
+.bd.off{border:1px solid #2A3050;background:transparent;color:var(--t3)}
+.ea{color:var(--t3);font-size:11px;transition:transform .2s;display:inline-block}
+.ea.op{transform:rotate(180deg)}
+.cb{padding:0 18px 18px;border-top:1px solid #1a1d2e;display:none}
+.cb.op{display:block}
+.cb .sf{font-size:13px;color:var(--t2);margin:12px 0 14px;line-height:1.5}
+textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--bdr);background:var(--inp);color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.6;resize:vertical;outline:none}
+textarea:focus{border-color:var(--blue)}textarea::placeholder{color:var(--t3)}
+.bgn{width:100%;padding:12px;border-radius:10px;border:none;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px}
+.bgn:disabled{opacity:.5;cursor:not-allowed}
+.bgn:not(:disabled):hover{filter:brightness(1.15)}
+.bcp{width:100%;padding:12px;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;cursor:pointer;margin-top:10px;display:flex;align-items:center;justify-content:center;gap:8px;background:transparent}
+.bcp:hover{filter:brightness(1.15)}
+.sp{width:16px;height:16px;border:2px solid transparent;border-top:2px solid currentColor;border-radius:50%;animation:spin .8s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.dc{padding:18px;border-radius:12px;background:var(--inp);border:1px solid var(--bdr);margin-bottom:10px;cursor:pointer;transition:all .2s}
+.dc:hover{border-color:var(--blue)}.dc.se{border-color:var(--blue);background:rgba(74,158,255,.05)}
+.dh{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dr{width:20px;height:20px;border-radius:50%;border:2px solid #2A3050;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.dc.se .dr{border-color:var(--blue);background:var(--blue)}
+.dn_{font-size:16px;font-weight:700;color:var(--t1)}.dc.se .dn_{color:var(--blue)}
+.dm{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.dtg{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:var(--t2)}
+.pal{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+.sw{display:flex;align-items:center;gap:6px}
+.swc{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,.1);flex-shrink:0}
+.swi{font-family:'JetBrains Mono',monospace;font-size:10px}
+.swh{color:var(--t1)}.swl{color:var(--t3);font-size:9px}
+.dcon{font-size:12px;color:var(--t2);line-height:1.6;margin-top:10px}
+.stbl{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px}
+.stbl th{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--t3);padding:10px 8px;text-align:left;border-bottom:2px solid var(--bdr);white-space:nowrap}
+.stbl td{padding:10px 8px;border-bottom:1px solid rgba(30,34,53,.5);color:var(--t2);vertical-align:top;line-height:1.5}
+.stbl tr:hover td{background:rgba(255,255,255,.01)}
+.stbl .sn{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--blue);font-size:13px}
+.stbl .tm{font-family:'JetBrains Mono',monospace;color:var(--t3);font-size:11px;white-space:nowrap}
+.stbl .vo{color:var(--t1);font-style:italic}.stbl .os{color:var(--cyan);font-weight:600;font-size:11px}
+.stbl .vi{color:#B8BDD0}.stbl .cm{color:var(--purple);font-size:11px}
+.rva{margin-top:14px;padding:14px;border-radius:10px;background:rgba(74,158,255,.04);border:1px solid rgba(74,158,255,.15)}
+.rvl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--blue);margin-bottom:8px}
+.rvr{display:flex;gap:8px}.rvr textarea{flex:1;min-height:44px}
+.rvb{padding:10px 18px;border-radius:8px;border:none;background:var(--blue);color:#08090E;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;align-self:flex-end}
+.rvb:disabled{opacity:.5;cursor:not-allowed}
+.rvh{margin-top:10px;max-height:200px;overflow-y:auto}
+.rvm{padding:8px 12px;border-radius:8px;margin-bottom:6px;font-size:12px;line-height:1.5}
+.rvu{background:rgba(74,158,255,.08);border:1px solid rgba(74,158,255,.15);color:var(--blue)}
+.rva_{background:rgba(0,255,136,.05);border:1px solid rgba(0,255,136,.1);color:var(--t2)}
+.oi{padding:12px;border-radius:8px;background:var(--inp);border:1px solid var(--bdr);display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.oi.sa{cursor:pointer}.oi.so{border-color:var(--blue)}
+.rd{width:18px;height:18px;border-radius:50%;border:2px solid #2A3050;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center}
+.oi.so .rd{border-color:inherit;background:inherit}
+.ol{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3);margin-bottom:4px}
+.ot{font-size:12px;color:#B8BDD0;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+audio{width:100%;height:40px;margin-top:8px}
+video{width:100%;border-radius:8px;margin-top:8px;max-height:360px;background:#000}
+.rm{background:none;border:none;color:var(--t3);cursor:pointer;padding:4px;opacity:.4;flex-shrink:0}
+.rm:hover{opacity:1;color:var(--pink)}
+.ar{display:flex;gap:8px}.ar textarea{flex:1;min-height:48px}
+.ba{padding:8px 14px;border-radius:8px;cursor:pointer;font-family:'JetBrains Mono',monospace;font-size:11px;white-space:nowrap;align-self:flex-end;border:none}
+.ba:hover{filter:brightness(1.3)}
+.er{margin-top:8px;padding:10px 14px;border-radius:8px;background:rgba(255,51,102,.08);border:1px solid rgba(255,51,102,.2);color:var(--pink);font-size:12px;font-family:'JetBrains Mono',monospace}
+.tst{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--card);border:1px solid var(--green);color:var(--green);padding:10px 24px;border-radius:10px;font-family:'JetBrains Mono',monospace;font-size:12px;z-index:999;transition:transform .3s;pointer-events:none}
+.tst.sh{transform:translateX(-50%) translateY(0)}
+.bnr{margin-top:30px;padding:20px 24px;border-radius:14px;background:linear-gradient(135deg,rgba(0,255,136,.06),rgba(0,212,255,.04));border:1px solid rgba(0,255,136,.2);text-align:center;display:none}
+.bnr.sh{display:block}
+.gsm{height:10px}
+@media(max-width:600px){h1{font-size:22px}.wrap{padding:24px 14px 80px}.sg{grid-template-columns:1fr}.pal{flex-direction:column}}
+label:hover{border-color:var(--blue) !important;color:var(--blue) !important}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="htag">Pipeline Workspace</div>
+  <div class="hrow">
+    <div><h1>AI Video Production</h1><p>Claude & ElevenLabs direct API · Flow & Suno one-click copy</p></div>
+    <button class="bres" onclick="resetAll()">Reset All</button>
+  </div>
+  <button class="stog" id="stogbtn" onclick="togS()">🔑 Show API Settings</button>
+  <div class="span" id="sp">
+    <div class="sg">
+      <div class="c"><div class="lbl">CLAUDE API KEY</div><div class="kr"><input type="password" id="ck" placeholder="sk-ant-..." oninput="saveK()"><button class="bs" onclick="togV('ck',this)">Show</button></div><div class="ks" id="cks"></div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);margin-top:2px">Get: <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--blue);text-decoration:none">console.anthropic.com</a></div></div>
+      <div class="c"><div class="lbl">ELEVENLABS API KEY</div><div class="kr"><input type="password" id="ek" placeholder="Paste key" oninput="saveK()"><button class="bs" onclick="togV('ek',this)">Show</button></div><div class="ks" id="eks"></div></div>
+      <div class="c"><div class="lbl">VOICE ID <span style="opacity:.5">(default: Adam)</span></div><div class="kr"><input id="ev" placeholder="pNInz6obpgDQGcFmaJgB" oninput="saveK()"><button class="bs" onclick="window.open('https://elevenlabs.io/app/voice-library','_blank')">Browse</button></div></div>
+    </div>
+  </div>
+  <div class="prog"><div class="phdr"><span>PROGRESS</span><span id="ptxt"></span></div><div class="pbar"><div class="pfil" id="pfil"></div></div></div>
+  <div id="pipe"></div>
+  <div class="bnr" id="cbn"><div style="font-size:28px;margin-bottom:8px">🎬</div><div style="font-size:18px;font-weight:700;color:var(--green)">Pipeline Complete!</div><div style="font-size:13px;color:var(--t2);margin-top:4px">All steps done — your video is ready</div></div>
+</div>
+<div class="tst" id="tst"></div>
+<script>
+const SK="vp-v6",KK="vp-k3",MDL="claude-sonnet-4-20250514";
+const SYS=`You are an AI Video Production Director. Be extremely specific. Use professional video/cinema terminology. Think like a cinematographer and creative director.`;
+
+const STEPS=[
+  {id:"brief",n:"00",title:"Brief Input",sub:"Paste your video brief — this feeds the entire pipeline",color:"#4A9EFF",type:"input",int:"none"},
+  {id:"dir",n:"01",title:"Creative Direction",sub:"Claude generates 3 directions with color palettes — pick your favorite",color:"#4A9EFF",tool:"Claude AI",type:"direction",int:"claude-dir",btn:"\u2728 Generate Directions"},
+  {id:"script",n:"02",title:"Script & Storyboard",sub:"Claude writes the script — review, request revisions, finalize before continuing",color:"#4A9EFF",tool:"Claude AI",type:"script",int:"claude-script",btn:"\u2728 Generate Script"},
+  {id:"prompts",n:"03",title:"Generate All Prompts",sub:"From finalized script \u2192 Veo 3 + VO + Suno prompts auto-generated",color:"#00D4FF",tool:"Claude AI",type:"single",int:"claude-prompts",btn:"\u26A1 Generate All Prompts"},
+  {id:"video",n:"4A",title:"Video Clips",sub:"Copy Veo 3 prompts \u2192 open Google Flow \u2192 generate clips",color:"#00D4FF",tool:"Google Flow",url:"https://labs.google/fx/tools/flow",type:"select",int:"copy",btn:"\uD83D\uDCCB Copy Prompts & Open Flow",par:true},
+  {id:"voice",n:"4B",title:"Voice-Over",sub:"ElevenLabs generates audio directly here — compare voices",color:"#00FF88",tool:"ElevenLabs",url:"https://elevenlabs.io",type:"select",int:"eleven",btn:"\uD83C\uDFA4 Generate Voice-Over",par:true},
+  {id:"music",n:"4C",title:"Music",sub:"Copy Suno prompts \u2192 open Suno \u2192 generate tracks",color:"#A855F7",tool:"Suno",url:"https://suno.com",type:"select",int:"copy",btn:"\uD83D\uDCCB Copy Prompts & Open Suno",par:true},
+  {id:"comp",n:"05",title:"Compile & Polish",sub:"Assemble in After Effects \u2014 video + VO + music + text + transitions",color:"#FF8A00",tool:"After Effects",type:"single",int:"none"},
+];
+
+let S=ld()||STEPS.map(s=>({id:s.id,pr:'',out:[],sel:null,done:false,exp:true,revs:[],imgs:[]}));
+let LD={};
+
+function $(id){return document.getElementById(id)}
+function ld(){try{return JSON.parse(localStorage.getItem(SK))}catch(e){return null}}
+function sv(){try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}}
+function loadK(){try{return JSON.parse(localStorage.getItem(KK))||{}}catch(e){return{}}}
+function saveK(){localStorage.setItem(KK,JSON.stringify({ck:$('ck').value,ek:$('ek').value,ev:$('ev').value}));updK()}
+function initK(){const k=loadK();if(k.ck)$('ck').value=k.ck;if(k.ek)$('ek').value=k.ek;if(k.ev)$('ev').value=k.ev;updK()}
+function updK(){$('cks').innerHTML=$('ck').value?'<span style="color:#00FF88">\u25CF Saved</span>':'<span style="color:#FF8A00">\u25CF No key</span>';$('eks').innerHTML=$('ek').value?'<span style="color:#00FF88">\u25CF Saved</span>':'<span style="color:#FF8A00">\u25CF No key</span>'}
+function togS(){const p=$('sp');p.classList.toggle('open');$('stogbtn').textContent=p.classList.contains('open')?'\uD83D\uDD11 Hide API Settings':'\uD83D\uDD11 Show API Settings'}
+function togV(id,b){const i=$(id);i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'Show':'Hide'}
+function toast(m){const t=$('tst');t.textContent=m;t.classList.add('sh');setTimeout(()=>t.classList.remove('sh'),2500)}
+
+// --- Image handling ---
+function handleImgUpload(e){
+  const files=Array.from(e.target.files);
+  files.forEach(f=>{
+    if(!f.type.startsWith('image/'))return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const base64=ev.target.result;
+      const mediaType=f.type;
+      S[0].imgs=S[0].imgs||[];
+      S[0].imgs.push({name:f.name,data:base64,mediaType,id:Date.now()+Math.random()});
+      sv();render();
+    };
+    reader.readAsDataURL(f);
+  });
+  e.target.value='';
+}
+function rmImg(idx){
+  S[0].imgs.splice(idx,1);sv();render();
+}
+function getImgContent(){
+  if(!S[0].imgs||!S[0].imgs.length)return[];
+  return S[0].imgs.map(img=>{
+    const raw=img.data.split(',')[1];
+    const mt=img.mediaType||'image/png';
+    return{type:'image',source:{type:'base64',media_type:mt,data:raw}};
+  });
+}
+function esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML.replace(/\n/g,'<br>')}
+function svgChk(){return'<svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M3 7l3 3 5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+function svgSel(){return'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2.5 2.5L8 3" stroke="#08090E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+function svgExt(){return'<svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M5 1H2a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V7M7 1h4m0 0v4m0-4L5 7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'}
+function svgDel(){return'<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 3h8M4.5 3V2a.5.5 0 01.5-.5h2a.5.5 0 01.5.5v1M9 3v7a1 1 0 01-1 1H4a1 1 0 01-1-1V3" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>'}
+
+function lkd(i){
+  if(!i)return false;const st=STEPS[i];
+  if(st.par)return!S[3].done;
+  if(st.id==='comp')return!STEPS.every((s,j)=>!s.par||S[j].done);
+  const p=S[i-1],ps=STEPS[i-1];
+  if(ps.type==='select'||ps.type==='direction')return!p.done||p.sel===null;
+  return!p.done;
+}
+
+function upProg(){
+  const d=S.filter(s=>s.done).length,t=S.length,p=Math.round(d/t*100);
+  $('ptxt').textContent=d+'/'+t+' \u00B7 '+p+'%';
+  const f=$('pfil');f.style.width=p+'%';
+  f.style.background=p===100?'linear-gradient(90deg,#00FF88,#00D4FF)':'linear-gradient(90deg,#4A9EFF,#00D4FF)';
+  $('cbn').className='bnr'+(p===100?' sh':'');
+}
+
+function exBySep(txt,tag){
+  // Find ===TAG=== separator and extract content until next separator or end
+  const re=new RegExp('===\\s*'+tag+'\\s*===\\s*\\n([\\s\\S]*?)(?=\\n===\\s*[A-Z]+\\s*===|$)','i');
+  const m=txt.match(re);
+  if(m&&m[1].trim())return m[1].trim();
+  // Fallback: try ## heading format
+  return exSec(txt,tag);
+}
+
+function exSec(txt,kw){
+  // Try ## heading format first
+  const m1=txt.match(new RegExp('#{1,3}\\s*[^\\n]*(?:'+kw+')[^\\n]*\\n([\\s\\S]*?)(?=\\n#{1,3}\\s|$)','i'));
+  if(m1&&m1[1].trim())return m1[1].trim();
+  // Try **heading** format
+  const m2=txt.match(new RegExp('\\*\\*[^*]*(?:'+kw+')[^*]*\\*\\*[:\\s]*\\n([\\s\\S]*?)(?=\\n\\*\\*[^*]+\\*\\*|\\n#{1,3}\\s|$)','i'));
+  if(m2&&m2[1].trim())return m2[1].trim();
+  // Try "Section:" format
+  const m3=txt.match(new RegExp('(?:'+kw+')[^:]*:[\\s]*\\n([\\s\\S]*?)(?=\\n[A-Z][^:]+:|\\n#{1,3}\\s|\\n\\*\\*|$)','i'));
+  if(m3&&m3[1].trim())return m3[1].trim();
+  return'';
+}
+
+async function callC(prompt,withImages){
+  const k=loadK();if(!k.ck)throw new Error('Enter Claude API key in \uD83D\uDD11 Settings');
+  let content;
+  if(withImages){
+    const imgs=getImgContent();
+    content=[...imgs,{type:'text',text:prompt}];
+  }else{
+    content=prompt;
+  }
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k.ck,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MDL,max_tokens:4096,system:SYS,messages:[{role:'user',content}]})});
+  if(!r.ok)throw new Error('Claude error '+r.status+': '+(await r.text()).slice(0,150));
+  const d=await r.json();return d.content.map(c=>c.text||'').join('\n');
+}
+
+function cleanVO(text){
+  // Remove all [annotations] like [pause], [emphasis on "first"], [confident tone], etc.
+  let t=text.replace(/\[(?:pause|break|beat)\]/gi,'...');
+  t=t.replace(/\[[^\]]*\]/g,'');
+  // Clean up extra whitespace and multiple dots
+  t=t.replace(/\.{4,}/g,'...');
+  t=t.replace(/\s{2,}/g,' ');
+  return t.trim();
+}
+
+async function callE(text){
+  const k=loadK();if(!k.ek)throw new Error('Enter ElevenLabs key in \uD83D\uDD11 Settings');
+  const cleaned=cleanVO(text);
+  const r=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+(k.ev||'pNInz6obpgDQGcFmaJgB'),{method:'POST',headers:{'Content-Type':'application/json','xi-api-key':k.ek},body:JSON.stringify({text:cleaned,model_id:'eleven_multilingual_v2',voice_settings:{stability:.65,similarity_boost:.75,style:.35}})});
+  if(!r.ok)throw new Error('ElevenLabs error '+r.status);
+  return URL.createObjectURL(await r.blob());
+}
+
+// --- Veo 3 API ---
+const VEO_BASE='https://generativelanguage.googleapis.com/v1beta';
+const VEO_MODEL='models/veo-3.0-generate-preview';
+
+async function callVeo(prompt,onStatus){
+  const k=loadK();
+  if(!k.gk)throw new Error('Enter Gemini API key in \uD83D\uDD11 Settings');
+  
+  // Step 1: Start generation
+  if(onStatus)onStatus('Starting video generation...');
+  const genR=await fetch(`${VEO_BASE}/${VEO_MODEL}:predictLongRunning?key=${k.gk}`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      instances:[{prompt}],
+      parameters:{
+        aspectRatio:'16:9',
+        sampleCount:1,
+        durationSeconds:8,
+        enhancePrompt:true
+      }
+    })
+  });
+  
+  if(!genR.ok){
+    const err=await genR.text();
+    // Fallback: try Gemini API v1beta generateVideos endpoint
+    return await callVeoAlt(prompt,k.gk,onStatus);
+  }
+  
+  const genD=await genR.json();
+  const opName=genD.name;
+  if(!opName)throw new Error('No operation returned');
+  
+  // Step 2: Poll until done
+  return await pollVeoOp(opName,k.gk,onStatus);
+}
+
+async function callVeoAlt(prompt,apiKey,onStatus){
+  // Alternative endpoint format
+  if(onStatus)onStatus('Starting video generation...');
+  const r=await fetch(`${VEO_BASE}/${VEO_MODEL}:generateVideos?key=${apiKey}`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      prompt,
+      config:{
+        aspectRatio:'16:9',
+        numberOfVideos:1
+      }
+    })
+  });
+  
+  if(!r.ok){
+    const err=await r.text();
+    throw new Error('Veo 3 error '+r.status+': '+err.slice(0,200));
+  }
+  
+  const d=await r.json();
+  const opName=d.name;
+  if(!opName)throw new Error('No operation returned from Veo');
+  
+  return await pollVeoOp(opName,apiKey,onStatus);
+}
+
+async function pollVeoOp(opName,apiKey,onStatus){
+  const maxWait=300000; // 5 min
+  const interval=10000; // 10s
+  const start=Date.now();
+  let attempt=0;
+  
+  while(Date.now()-start<maxWait){
+    attempt++;
+    if(onStatus)onStatus('Generating video... ('+attempt*10+'s)');
+    await new Promise(r=>setTimeout(r,interval));
+    
+    const pollR=await fetch(`${VEO_BASE}/${opName}?key=${apiKey}`);
+    if(!pollR.ok)continue;
+    
+    const pollD=await pollR.json();
+    if(pollD.done){
+      // Extract video
+      if(pollD.error)throw new Error('Veo error: '+(pollD.error.message||'Unknown'));
+      
+      // Try different response shapes
+      const vids=pollD.response?.generatedVideos||pollD.response?.generateVideoResponse?.generatedSamples||pollD.response?.videos||[];
+      if(vids.length===0)throw new Error('No video in response');
+      
+      const vid=vids[0];
+      // Video might be base64 or a URI
+      if(vid.video?.uri){
+        // Download from URI
+        const vr=await fetch(vid.video.uri);
+        const blob=await vr.blob();
+        return URL.createObjectURL(blob);
+      }
+      if(vid.video?.videoBytes||vid.bytesBase64Encoded){
+        const b64=vid.video?.videoBytes||vid.bytesBase64Encoded;
+        const binary=atob(b64);
+        const bytes=new Uint8Array(binary.length);
+        for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+        const blob=new Blob([bytes],{type:'video/mp4'});
+        return URL.createObjectURL(blob);
+      }
+      // Try response.video directly
+      if(pollD.response?.video){
+        const vr=await fetch(pollD.response.video);
+        const blob=await vr.blob();
+        return URL.createObjectURL(blob);
+      }
+      throw new Error('Could not extract video from response');
+    }
+  }
+  throw new Error('Veo timeout after 5 minutes');
+}
+
+// --- Suno API (via sunoapi.org) ---
+const SUNO_BASE='https://api.sunoapi.org/api/v1';
+
+async function callSuno(prompt,onStatus){
+  const k=loadK();
+  if(!k.sk)throw new Error('Enter Suno API key in \uD83D\uDD11 Settings');
+  
+  // Parse prompt to extract style and title
+  let style='Cinematic, Electronic',title='AI Video Soundtrack',lyrics='';
+  const styleM=prompt.match(/(?:genre|style|mood)[:;]\s*([^\n]+)/i);
+  if(styleM)style=styleM[1].trim().slice(0,200);
+  const bpmM=prompt.match(/(\d+)\s*bpm/i);
+  if(bpmM)style+=', '+bpmM[0];
+  
+  if(onStatus)onStatus('Starting music generation...');
+  
+  // Use custom mode, instrumental
+  const r=await fetch(SUNO_BASE+'/generate',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+k.sk},
+    body:JSON.stringify({
+      customMode:false,
+      instrumental:true,
+      model:'V4_5ALL',
+      prompt:prompt.slice(0,500),
+      callBackUrl:''
+    })
+  });
+  
+  if(!r.ok){
+    const err=await r.text();
+    throw new Error('Suno error '+r.status+': '+err.slice(0,200));
+  }
+  
+  const d=await r.json();
+  if(d.code!==200)throw new Error('Suno: '+(d.msg||'Unknown error'));
+  const taskId=d.data?.taskId;
+  if(!taskId)throw new Error('No task ID from Suno');
+  
+  // Poll for completion
+  const maxWait=180000; // 3 min
+  const interval=8000;
+  const start=Date.now();
+  let attempt=0;
+  
+  while(Date.now()-start<maxWait){
+    attempt++;
+    if(onStatus)onStatus('Generating music... ('+Math.round((Date.now()-start)/1000)+'s)');
+    await new Promise(r=>setTimeout(r,interval));
+    
+    const pollR=await fetch(SUNO_BASE+'/generate/record-info?taskId='+taskId,{
+      headers:{'Authorization':'Bearer '+k.sk}
+    });
+    if(!pollR.ok)continue;
+    
+    const pollD=await pollR.json();
+    if(pollD.code===200&&pollD.data?.status==='SUCCESS'){
+      const songs=pollD.data?.response?.sunoData||[];
+      if(songs.length===0)throw new Error('No songs in response');
+      // Return array of song URLs
+      return songs.map(s=>({
+        url:s.audioUrl||s.streamAudioUrl,
+        title:s.title||'Track',
+        style:s.tags||style,
+        duration:s.duration?Math.round(s.duration)+'s':'',
+        imageUrl:s.imageUrl
+      }));
+    }
+    if(pollD.data?.status==='FAILED'){
+      throw new Error('Suno generation failed: '+(pollD.data?.errorMessage||'Unknown'));
+    }
+  }
+  throw new Error('Suno timeout after 3 minutes');
+}
+
+// --- Parsers ---
+function parseDirs(text){
+  const pts=text.split(/\n---\n/).filter(p=>p.trim());
+  return pts.map((p,pi)=>{
+    // Try multiple patterns for name extraction
+    let nm='Direction '+(pi+1);
+    // Pattern: Direction 1: "Name" or **Direction 1: "Name"**
+    const m1=p.match(/direction\s*\d*\s*[:.]?\s*[""\u201C\u201D]([^""\u201C\u201D]+)[""\u201C\u201D]/i);
+    // Pattern: **Name** at start or after Direction N:
+    const m2=p.match(/\*\*(?:direction\s*\d*\s*[:.]?\s*)?[""\u201C\u201D]?([^*""\u201C\u201D]+?)[""\u201C\u201D]?\*\*/i);
+    // Pattern: Direction Name: **Something**
+    const m3=p.match(/direction\s*name.*?:\s*\*?\*?(.+?)(?:\*\*|\n)/i);
+    // Pattern: # Name or ## Name
+    const m4=p.match(/^#+\s*(?:direction\s*\d*\s*[:.]?\s*)?(.+)/im);
+    
+    if(m1&&m1[1].trim()) nm=m1[1].trim();
+    else if(m2&&m2[1].trim()&&m2[1].trim().length<60) nm=m2[1].trim();
+    else if(m3&&m3[1].trim()) nm=m3[1].trim();
+    else if(m4&&m4[1].trim()) nm=m4[1].trim().replace(/\*\*/g,'').replace(/[""\u201C\u201D]/g,'');
+    
+    // Clean up: remove "Direction N:" prefix if still there
+    nm=nm.replace(/^direction\s*\d*\s*[:.\-]\s*/i,'').replace(/[""\u201C\u201D]/g,'').trim();
+    if(!nm) nm='Direction '+(pi+1);
+
+    const cols=[...p.matchAll(/#([0-9A-Fa-f]{6})/g)].map(m=>'#'+m[1]);
+    const labs=[...p.matchAll(/#[0-9A-Fa-f]{6}\s*[-\u2013\u2014:()\u2014]?\s*([^\n*#,]+)/g)].map(m=>m[1].trim().replace(/^\(/,'').replace(/\)$/,''));
+    const mood=(p.match(/mood.*?tone.*?:(.*?)(?:\n|$)/i)||p.match(/mood.*?:(.*?)(?:\n|$)/i)||['',''])[1].trim().split(/[,;]/).map(s=>s.trim()).filter(Boolean);
+    const style=(p.match(/visual\s*style.*?:(.*?)(?:\n|$)/i)||['',''])[1].trim();
+    const typo=(p.match(/typography.*?:(.*?)(?:\n|$)/i)||['',''])[1].trim();
+    // Extract concept paragraph
+    const conceptM=p.match(/concept.*?:([\s\S]*?)(?=\n\s*[-*]?\s*\*?\*?mood|\n\s*[-*]?\s*\*?\*?visual|\n\s*[-*]?\s*\*?\*?color|\n\s*\n)/i);
+    const concept=conceptM?conceptM[1].replace(/\*\*/g,'').trim():'';
+    // Extract reference vibe
+    const vibeM=p.match(/reference\s*vibe.*?:(.*?)$/im);
+    const vibe=vibeM?vibeM[1].replace(/\*\*/g,'').replace(/\*/g,'').trim():'';
+    return{nm,text:p,cols,labs,mood,style,typo,concept,vibe};
+  });
+}
+
+function parseScript(text){
+  const rows=[];
+  for(const l of text.split('\n')){
+    const m=l.match(/\|\s*(\d+)\s*\|\s*([^|]*)\|\s*([^|]*)\|\s*([^|]*)\|\s*([^|]*)\|\s*([^|]*)\|\s*([^|]*)\|/);
+    if(m)rows.push({s:m[1],t:m[2].trim(),d:m[3].trim(),v:m[4].trim(),o:m[5].trim(),vi:m[6].trim(),c:m[7].trim()});
+  }
+  return rows;
+}
+
+// --- Renderers ---
+function rDir(dir,idx,sel,si){
+  const is=sel===idx;
+  const swatches=dir.cols.slice(0,5).map((c,ci)=>'<div class="sw"><div class="swc" style="background:'+c+'"></div><div class="swi"><div class="swh">'+c+'</div>'+(dir.labs[ci]?'<div class="swl">'+dir.labs[ci].slice(0,30)+'</div>':'')+'</div></div>').join('');
+  const tags=dir.mood.slice(0,5).map(m=>'<span class="dtg">'+m+'</span>').join('');
+
+  let html='<div class="dc'+(is?' se':'')+'" onclick="selOut('+si+','+idx+')">';
+  // Header: radio + name
+  html+='<div class="dh"><div class="dr">'+(is?svgSel():'')+'</div><div class="dn_">'+dir.nm+'</div></div>';
+  // Concept paragraph
+  if(dir.concept) html+='<div style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:12px;padding:10px 14px;background:rgba(255,255,255,.02);border-radius:8px;border-left:3px solid '+( is?'var(--blue)':'var(--bdr)')+'">'+esc(dir.concept)+'</div>';
+  // Tags row: style + mood + typo
+  if(dir.style||dir.mood.length||dir.typo){
+    html+='<div class="dm">';
+    if(dir.style) html+='<span class="dtg" style="border-color:var(--blue);color:var(--blue)">\uD83C\uDFA8 '+dir.style+'</span>';
+    html+=tags;
+    if(dir.typo) html+='<span class="dtg" style="border-color:var(--purple);color:var(--purple)">\uD83D\uDDA8\uFE0F '+dir.typo+'</span>';
+    html+='</div>';
+  }
+  // Color palette
+  if(dir.cols.length) html+='<div style="margin-top:8px"><div style="font-family:\'JetBrains Mono\',monospace;font-size:9px;letter-spacing:2px;color:var(--t3);margin-bottom:6px">COLOR PALETTE</div><div class="pal">'+swatches+'</div></div>';
+  // Reference vibe
+  if(dir.vibe) html+='<div style="margin-top:10px;font-size:11px;color:var(--t3);font-style:italic;line-height:1.5">\u2728 '+esc(dir.vibe)+'</div>';
+  html+='</div>';
+  return html;
+}
+
+function rScript(rows){
+  if(!rows.length)return'';
+  return'<div style="overflow-x:auto;margin:12px 0"><table class="stbl"><thead><tr><th>Shot</th><th>Time</th><th>Dur</th><th>Voice-Over</th><th>On-Screen</th><th>Visual Description</th><th>Camera</th></tr></thead><tbody>'+rows.map(r=>'<tr><td class="sn">'+r.s+'</td><td class="tm">'+r.t+'</td><td class="tm">'+r.d+'</td><td class="vo">\u201C'+r.v+'\u201D</td><td class="os">'+r.o+'</td><td class="vi">'+r.vi+'</td><td class="cm">'+r.c+'</td></tr>').join('')+'</tbody></table></div>';
+}
+
+// --- Generation ---
+async function gen(i){
+  const st=STEPS[i],s=S[i];LD[i]=true;delete s.error;render();
+  try{
+    if(st.int==='claude-dir'){
+      const b=S[0].pr;if(!b)throw new Error('Fill in Brief first');
+      const hasImgs=S[0].imgs&&S[0].imgs.length>0;
+      const imgNote=hasImgs?'\n\nI have attached '+S[0].imgs.length+' reference image(s) (logo, brand visuals, style references). Analyze them carefully and incorporate the brand colors, visual style, and mood into your creative directions. Match typography and color palette to the brand identity shown.':'';
+      const res=await callC('Analyze this brief and propose exactly 3 creative directions.\nFor EACH:\n- **Direction Name** (2-3 evocative words)\n- **Concept** (1 paragraph)\n- **Mood & Tone** (3-5 keywords)\n- **Visual Style** (cinematic/minimal/abstract etc)\n- **Color Palette** (exactly 5 colors as #HEX - description)\n- **Typography** (font pairing)\n- **Reference Vibe** (what it feels like)\n\nSeparate directions with ---'+imgNote+'\n\nBRIEF:\n'+b, hasImgs);
+      const dirs=parseDirs(res);
+      s.out=dirs.map((d,j)=>({text:d.text,id:Date.now()+j,parsed:d}));
+      s.sel=null;
+    }
+    else if(st.int==='claude-script'){
+      const b=S[0].pr,di=S[1].sel;
+      if(di===null)throw new Error('Select direction first');
+      const res=await callC('Write a 30s video script as markdown table:\n| Shot # | Time | Duration | Voice-Over | On-Screen Text | Visual Description | Camera |\n\nRules:\n- 5-7 shots, 3-6s each\n- VO: concise, punchy, match tone\n- Visuals: extremely specific cinematography\n- Camera: specific movements (dolly, pan, crane, etc)\n\nDIRECTION:\n'+S[1].out[di].text+'\n\nBRIEF:\n'+b);
+      s.out=[{text:res,id:Date.now()}];s.sel=0;s.revs=[];
+    }
+    else if(st.int==='claude-prompts'){
+      const scr=S[2].out[S[2].sel]?.text||'';
+      if(!scr)throw new Error('Finalize script first');
+      const res=await callC('Based on this finalized script, generate ALL three sections below. Use EXACTLY the separator lines shown.\n\n===VEO===\nFor each shot, write "Shot N:" then an optimized Veo 3 prompt (max 150 words): visual style, scene, camera movement, lighting, color grading, audio direction. One shot per paragraph.\n\n===VO===\nFull compiled voice-over script. Clean text only. Use ... for pauses, [emphasis] for stress, [pause] for beats.\n\n===SUNO===\n2-3 music prompts: genre, BPM, mood, instruments. Include [instrumental].\n\nIMPORTANT: You MUST include all three separator lines (===VEO===, ===VO===, ===SUNO===) exactly as shown.\n\nSCRIPT:\n'+scr+'\n\nBRIEF:\n'+S[0].pr);
+      s.out=[{text:res,id:Date.now()}];s.sel=0;
+      // Parse by separators
+      const veo=exBySep(res,'VEO');
+      const vo=exBySep(res,'VO');
+      const suno=exBySep(res,'SUNO');
+      if(veo){S[4].pr=veo;S[4].shots=parseVeoShots(veo)}
+      if(vo)S[5].pr=vo;
+      if(suno){S[6].pr=suno;S[6].tracks=parseSunoTracks(suno)}
+    }
+    else if(st.int==='eleven'){
+      const txt=s.pr||exSec(S[3].out[0]?.text||'','ElevenLabs|VO');
+      if(!txt)throw new Error('No VO script \u2014 complete Step 03');
+      s.pr=txt;const url=await callE(txt);
+      s.out.push({text:'\uD83C\uDFA4 Voice-Over Audio',id:Date.now(),au:url});
+    }
+    else if(st.int==='copy'){
+      const kw=st.id==='video'?'Veo':'Suno';
+      let txt=s.pr||exSec(S[3].out[0]?.text||'',kw);
+      if(!txt)throw new Error('Complete Step 03 first');
+      s.pr=txt;await navigator.clipboard.writeText(txt);
+      toast('\u2713 Copied! Paste in '+st.tool);
+      if(st.url)setTimeout(()=>window.open(st.url,'_blank'),400);
+      LD[i]=false;sv();render();return;
+    }
+    sv();
+  }catch(e){s.error=e.message}
+  LD[i]=false;render();
+}
+
+async function revise(){
+  const ta=$('rev-input');if(!ta)return;
+  const fb=ta.value.trim();if(!fb)return;
+  const s=S[2];
+  s.revs.push({r:'user',t:fb});
+  ta.value='';LD[2]=true;render();
+  try{
+    const cur=s.out[s.sel]?.text||'';
+    const res=await callC('Current script:\n'+cur+'\n\nDirector revision request:\n'+fb+'\n\nRewrite the FULL script table with revisions applied. Keep same markdown table format. Only output the revised table.');
+    s.revs.push({r:'ai',t:'Script updated \u2713'});
+    s.out=[{text:res,id:Date.now()}];s.sel=0;sv();
+  }catch(e){s.revs.push({r:'ai',t:'Error: '+e.message})}
+  LD[2]=false;render();
+}
+
+// --- Main render ---
+function render(){
+  const P=$('pipe');P.innerHTML='';
+  STEPS.forEach((st,i)=>{
+    const s=S[i],lk=lkd(i),il=LD[i];
+    const isPS=st.par&&!STEPS[i-1]?.par,hasN=i<STEPS.length-1;
+    const cb_=st.color+'18',cbd=st.color+'40',cl=st.color+'12',cb2=st.color+'30';
+
+    if(isPS){const d=document.createElement('div');d.className='plbl';d.innerHTML='<span>\u26A1 STEP 4 \u2014 PARALLEL</span>';P.appendChild(d)}
+
+    // Tool badge
+    let tH='';
+    if(st.tool&&st.url)tH='<a class="tl" href="'+st.url+'" target="_blank" style="background:'+cl+';border:1px solid '+cb2+';color:'+st.color+'" onclick="event.stopPropagation()">'+svgExt()+' '+st.tool+'</a>';
+    else if(st.tool)tH='<span class="tt" style="background:'+cl+';border:1px solid '+cb2+';color:'+st.color+'">'+st.tool+'</span>';
+
+    // Action button
+    let aBtn='';
+    if(st.int.startsWith('claude'))
+      aBtn='<button class="bgn" onclick="event.stopPropagation();gen('+i+')" style="background:'+st.color+';color:#08090E" '+(il?'disabled':'')+'>'+( il?'<span class="sp"></span> Generating...':st.btn)+'</button>';
+    else if(st.int==='eleven')
+      aBtn='<button class="bgn" onclick="event.stopPropagation();gen('+i+')" style="background:'+st.color+';color:#08090E" '+(il?'disabled':'')+'>'+(il?'<span class="sp"></span> Generating...':st.btn)+'</button>';
+    else if(st.int==='copy')
+      aBtn='<button class="bcp" onclick="event.stopPropagation();gen('+i+')" style="border:1px solid '+st.color+'50;color:'+st.color+'">'+st.btn+'</button>';
+
+    // Body content based on type
+    let bodyContent='';
+
+    if(st.type==='input'){
+      const imgs=s.imgs||[];
+      const imgGrid=imgs.length?'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px">'+imgs.map((img,ii)=>'<div style="position:relative;width:100px;height:100px;border-radius:8px;overflow:hidden;border:1px solid var(--bdr)"><img src="'+img.data+'" style="width:100%;height:100%;object-fit:cover"><div style="position:absolute;bottom:0;left:0;right:0;padding:2px 4px;background:rgba(0,0,0,.7);font-family:\'JetBrains Mono\',monospace;font-size:8px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+img.name+'</div><button onclick="rmImg('+ii+')" style="position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;border:none;background:rgba(0,0,0,.7);color:var(--pink);cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center">\u00D7</button></div>').join('')+'</div>':'';
+      bodyContent='<div class="lbl">BRIEF</div><textarea rows="7" placeholder="Paste your video brief here...\n\n- Product: Whales Market\n- Purpose: Launch video\n- Tone: Bold, futuristic\n- Duration: 30s\n- Key message: Trade the future" oninput="upPr('+i+',this.value)">'+s.pr+'</textarea><div style="margin-top:12px"><div class="lbl">\uD83D\uDDBC\uFE0F REFERENCE IMAGES <span style="opacity:.5">(logo, brand visuals, style refs — Claude will analyze these)</span></div><div style="display:flex;align-items:center;gap:10px"><label style="padding:8px 16px;border-radius:8px;border:1px dashed var(--bdr);background:var(--inp);color:var(--t2);cursor:pointer;font-family:\'JetBrains Mono\',monospace;font-size:11px;display:flex;align-items:center;gap:6px;transition:all .2s"><input type="file" accept="image/*" multiple onchange="handleImgUpload(event)" style="display:none">+ Upload Images</label><span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:var(--t3)">'+imgs.length+' image'+(imgs.length!==1?'s':'')+' attached</span></div>'+imgGrid+'</div>';
+    }
+    else if(st.type==='direction'){
+      bodyContent='<div style="margin-bottom:14px"><div class="lbl">PROMPT</div><textarea rows="2" oninput="upPr('+i+',this.value)" placeholder="Auto-generated...">'+s.pr+'</textarea>'+aBtn+'</div>';
+      if(s.error)bodyContent+='<div class="er">\u26A0 '+esc(s.error)+'</div>';
+      if(s.out.length){
+        const dirs=s.out.map(o=>o.parsed||{nm:'Direction',cols:[],labs:[],mood:[],style:'',text:o.text});
+        const selSt=s.sel!==null?'\u2713 Direction '+(s.sel+1)+' selected':'\u26A0 Pick one';
+        const selC=s.sel!==null?'var(--green)':'var(--orange)';
+        bodyContent+='<div class="lbl" style="display:flex;justify-content:space-between"><span>DIRECTIONS (CLICK TO SELECT)</span><span style="color:'+selC+'">'+selSt+'</span></div>';
+        bodyContent+=dirs.map((d,j)=>rDir(d,j,s.sel,i)).join('');
+      }
+    }
+    else if(st.type==='script'){
+      bodyContent='<div style="margin-bottom:14px">'+aBtn+'</div>';
+      if(s.error)bodyContent+='<div class="er">\u26A0 '+esc(s.error)+'</div>';
+      if(s.out.length&&s.out[0]?.text){
+        const rows=parseScript(s.out[0].text);
+        if(rows.length){
+          bodyContent+='<div class="lbl">SCRIPT TABLE</div>'+rScript(rows);
+        }else{
+          bodyContent+='<div class="lbl">SCRIPT</div><div class="ot" style="padding:12px;background:var(--inp);border-radius:10px;border:1px solid var(--bdr);margin-bottom:12px">'+esc(s.out[0].text)+'</div>';
+        }
+        // Revision area
+        bodyContent+='<div class="rva"><div class="rvl">\u270F\uFE0F REVISE SCRIPT</div>';
+        if(s.revs&&s.revs.length){
+          bodyContent+='<div class="rvh">'+s.revs.map(r=>'<div class="rvm '+(r.r==='user'?'rvu':'rva_')+'">'+esc(r.t)+'</div>').join('')+'</div>';
+        }
+        bodyContent+='<div class="rvr"><textarea id="rev-input" rows="2" placeholder="e.g. Make shot 3 more dramatic, change VO tone to urgent..."></textarea><button class="rvb" onclick="revise()" '+(LD[2]?'disabled':'')+'>Revise</button></div></div>';
+      }
+    }
+    else if(st.id==='video'&&s.shots&&s.shots.length>1){
+      // Per-shot cards for Video step
+      bodyContent='<div style="margin-bottom:14px"><div class="lbl">VEO 3 PROMPTS \u2014 '+s.shots.length+' SHOTS</div>';
+      bodyContent+=s.shots.map((sh,si)=>'<div style="padding:12px;border-radius:10px;background:var(--inp);border:1px solid var(--bdr);margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:600;color:var(--cyan)">\uD83C\uDFAC '+sh.label+'</span><button class="bcp" onclick="event.stopPropagation();copyShotAndOpen('+si+')" style="border:1px solid var(--cyan);color:var(--cyan);padding:6px 12px;font-size:11px;margin:0">\uD83D\uDCCB Copy & Open Flow</button></div><div style="font-size:11px;color:var(--t2);line-height:1.6;font-family:\'JetBrains Mono\',monospace">'+esc(sh.prompt)+'</div></div>').join('');
+      bodyContent+='<button class="bcp" onclick="event.stopPropagation();gen('+i+')" style="border:1px solid var(--cyan);color:var(--cyan);margin-top:4px">\uD83D\uDCCB Copy ALL Prompts & Open Flow</button></div>';
+      if(s.error)bodyContent+='<div class="er">\u26A0 '+esc(s.error)+'</div>';
+      bodyContent+='<div class="ar"><textarea id="no-'+i+'" rows="2" placeholder="Add manually..."></textarea><button class="ba" onclick="addO('+i+')" style="background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);color:var(--cyan)">+ Add</button></div>';
+    }
+    else if(st.id==='music'&&s.tracks&&s.tracks.length>1){
+      // Per-track cards for Music step
+      bodyContent='<div style="margin-bottom:14px"><div class="lbl">SUNO PROMPTS \u2014 '+s.tracks.length+' TRACKS</div>';
+      bodyContent+=s.tracks.map((tr,ti)=>'<div style="padding:12px;border-radius:10px;background:var(--inp);border:1px solid var(--bdr);margin-bottom:8px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-family:\'JetBrains Mono\',monospace;font-size:11px;font-weight:600;color:var(--purple)">\uD83C\uDFB5 '+tr.label+'</span><button class="bcp" onclick="event.stopPropagation();copyTrackAndOpen('+ti+')" style="border:1px solid var(--purple);color:var(--purple);padding:6px 12px;font-size:11px;margin:0">\uD83D\uDCCB Copy & Open Suno</button></div><div style="font-size:11px;color:var(--t2);line-height:1.6;font-family:\'JetBrains Mono\',monospace">'+esc(tr.prompt)+'</div></div>').join('');
+      bodyContent+='<button class="bcp" onclick="event.stopPropagation();gen('+i+')" style="border:1px solid var(--purple);color:var(--purple);margin-top:4px">\uD83D\uDCCB Copy ALL Prompts & Open Suno</button></div>';
+      if(s.error)bodyContent+='<div class="er">\u26A0 '+esc(s.error)+'</div>';
+      bodyContent+='<div class="ar"><textarea id="no-'+i+'" rows="2" placeholder="Add manually..."></textarea><button class="ba" onclick="addO('+i+')" style="background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.3);color:var(--purple)">+ Add</button></div>';
+    }
+    else{
+      // single / select types
+      bodyContent='<div style="margin-bottom:14px"><div class="lbl">PROMPT</div><textarea rows="3" oninput="upPr('+i+',this.value)" placeholder="Auto-generated or paste manually...">'+s.pr+'</textarea>'+aBtn+'</div>';
+      if(s.error)bodyContent+='<div class="er">\u26A0 '+esc(s.error)+'</div>';
+      if(st.type!=='input'){
+        let ss='';
+        if(s.out.length&&st.type==='select'){
+          const ok=s.sel!==null;
+          ss='<span style="font-family:\'JetBrains Mono\',monospace;font-size:10px;color:'+(ok?'var(--green)':'var(--orange)')+'">'+(ok?'\u2713 Option '+(s.sel+1):'\u26A0 Pick one')+'</span>';
+        }
+        const items=s.out.map((o,j)=>{
+          const iS=s.sel===j;
+          return'<div class="oi'+(st.type==='select'?' sa':'')+(iS?' so':'')+'" '+(st.type==='select'?'onclick="selOut('+i+','+j+')"':'')+' style="'+(iS?'border-color:'+st.color+'50;background:'+st.color+'0A;':'')+'">'+(st.type==='select'?'<div class="rd" style="'+(iS?'border-color:'+st.color+';background:'+st.color:'')+'">'+( iS?svgSel():'')+'</div>':'')+'<div style="flex:1"><div class="ol" style="'+(iS?'color:'+st.color:'')+'">'+(st.type==='select'?'Option '+(j+1):'Result')+'</div><div class="ot">'+esc(o.text)+'</div>'+(o.au?'<audio controls src="'+o.au+'"></audio>':'')+(o.vidUrl?'<video controls src="'+o.vidUrl+'" style="width:100%;border-radius:8px;margin-top:8px;max-height:360px"></video>':'')+'</div><button class="rm" onclick="event.stopPropagation();rmOut('+i+','+j+')">'+svgDel()+'</button></div>';
+        }).join('');
+        bodyContent+='<div><div class="lbl" style="display:flex;justify-content:space-between">'+(st.type==='select'?'<span>OPTIONS</span>':'<span>OUTPUT</span>')+ss+'</div>'+items+'<div class="ar"><textarea id="no-'+i+'" rows="2" placeholder="Add manually..." onkeydown="if(event.key===\'Enter\'&&event.metaKey){event.preventDefault();addO('+i+')}"></textarea><button class="ba" onclick="addO('+i+')" style="background:'+st.color+'15;border:1px solid '+st.color+'40;color:'+st.color+'">+ Add</button></div></div>';
+      }
+    }
+
+    const c=document.createElement('div');
+    c.className='cd'+(s.done?' dn':'')+(lk?' lk':'');
+    c.innerHTML='<div class="ch" onclick="togExp('+i+')"><span class="bg" style="background:'+cb_+';color:'+st.color+';border:1px solid '+cbd+'">'+st.n+'</span><div class="ci"><div class="ct">'+st.title+'</div>'+(!s.exp?'<div class="cs">'+st.sub+'</div>':'')+'</div><div class="ca">'+tH+'<button class="bd '+(s.done?'on':'off')+'" onclick="event.stopPropagation();togDn('+i+')">'+svgChk()+'</button><span class="ea'+(s.exp?' op':'')+'">&#9660;</span></div></div><div class="cb'+(s.exp?' op':'')+'"><div class="sf">'+st.sub+'</div>'+bodyContent+'</div>';
+    P.appendChild(c);
+
+    // Arrow
+    if(hasN){
+      if(st.par&&STEPS[i+1]?.par){const g=document.createElement('div');g.className='gsm';P.appendChild(g)}
+      else{const nc=STEPS[i+1]?.color||'#4A9EFF';const a=document.createElement('div');a.className='arw';a.innerHTML='<div style="width:2px;height:32px;background:linear-gradient(180deg,#1E2235,'+nc+');border-radius:1px"></div><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid '+nc+';margin-top:-1px"></div>';P.appendChild(a)}
+    }
+  });
+  upProg();
+}
+
+function togExp(i){S[i].exp=!S[i].exp;sv();render()}
+function togDn(i){
+  S[i].done=!S[i].done;delete S[i].error;
+  // Auto-fill downstream when Step 03 (prompts) is marked done
+  if(i===3&&S[i].done&&S[i].out.length){
+    const res=S[i].out[S[i].sel||0]?.text||'';
+    const veo=exBySep(res,'VEO')||exSec(res,'Veo');
+    const vo=exBySep(res,'VO')||exSec(res,'ElevenLabs|VO|Voice');
+    const suno=exBySep(res,'SUNO')||exSec(res,'Suno|Music');
+    if(veo){S[4].pr=veo;S[4].shots=parseVeoShots(veo)}
+    if(vo)S[5].pr=vo;
+    if(suno){S[6].pr=suno;S[6].tracks=parseSunoTracks(suno)}
+  }
+  sv();render();
+}
+
+function parseVeoShots(text){
+  // Split by shot headers like "**Shot 1:**", "Shot 1:", "Prompt 1:", numbered items
+  const blocks=text.split(/\n(?=\*?\*?(?:shot|prompt|clip)\s*\d)/i).filter(b=>b.trim());
+  if(blocks.length>=2)return blocks.map((b,i)=>{
+    const nameM=b.match(/\*?\*?(?:shot|prompt|clip)\s*(\d+)[:\s*]*/i);
+    return{label:'Shot '+(nameM?nameM[1]:(i+1)),prompt:b.trim()};
+  });
+  // Fallback: split by double newlines
+  const paras=text.split(/\n\n+/).filter(p=>p.trim().length>30);
+  if(paras.length>=2)return paras.map((p,i)=>({label:'Shot '+(i+1),prompt:p.trim()}));
+  // Single block
+  return[{label:'All Shots',prompt:text.trim()}];
+}
+
+function parseSunoTracks(text){
+  const blocks=text.split(/\n(?=\*?\*?(?:track|prompt|option)\s*\d)/i).filter(b=>b.trim());
+  if(blocks.length>=2)return blocks.map((b,i)=>{
+    const nameM=b.match(/\*?\*?(?:track|prompt|option)\s*(\d+)[:\s*]*/i);
+    return{label:'Track '+(nameM?nameM[1]:(i+1)),prompt:b.trim()};
+  });
+  const paras=text.split(/\n\n+/).filter(p=>p.trim().length>20);
+  if(paras.length>=2)return paras.map((p,i)=>({label:'Track '+(i+1),prompt:p.trim()}));
+  return[{label:'All Tracks',prompt:text.trim()}];
+}
+function upPr(i,v){S[i].pr=v;delete S[i].error;sv()}
+function selOut(i,j){S[i].sel=j;sv();render()}
+function rmOut(i,j){
+  if(S[i].out[j]?.au)URL.revokeObjectURL(S[i].out[j].au);
+  S[i].out.splice(j,1);
+  if(S[i].sel===j)S[i].sel=null;else if(S[i].sel>j)S[i].sel--;
+  sv();render();
+}
+function addO(i){
+  const t=$('no-'+i);if(!t)return;const v=t.value.trim();if(!v)return;
+  S[i].out.push({text:v,id:Date.now()});
+  if(S[i].out.length===1&&STEPS[i].type==='single')S[i].sel=0;
+  t.value='';sv();render();
+}
+async function copyVeoPrompts(){
+  const txt=S[4].pr||exSec(S[3].out[0]?.text||'','Veo');
+  if(!txt){toast('No Veo prompts found');return}
+  await navigator.clipboard.writeText(txt);
+  toast('\u2713 Prompts copied! Opening Flow...');
+  setTimeout(()=>window.open('https://labs.google/fx/tools/flow','_blank'),400);
+}
+async function copySunoPrompts(){
+  const txt=S[6].pr||exSec(S[3].out[0]?.text||'','Suno');
+  if(!txt){toast('No Suno prompts found');return}
+  await navigator.clipboard.writeText(txt);
+  toast('\u2713 Prompts copied! Opening Suno...');
+  setTimeout(()=>window.open('https://suno.com','_blank'),400);
+}
+async function copyShotAndOpen(shotIdx){
+  const shots=S[4].shots;
+  if(!shots||!shots[shotIdx]){toast('No shot found');return}
+  await navigator.clipboard.writeText(shots[shotIdx].prompt);
+  toast('\u2713 '+shots[shotIdx].label+' copied! Opening Flow...');
+  setTimeout(()=>window.open('https://labs.google/fx/tools/flow','_blank'),400);
+}
+async function copyTrackAndOpen(trackIdx){
+  const tracks=S[6].tracks;
+  if(!tracks||!tracks[trackIdx]){toast('No track found');return}
+  await navigator.clipboard.writeText(tracks[trackIdx].prompt);
+  toast('\u2713 '+tracks[trackIdx].label+' copied! Opening Suno...');
+  setTimeout(()=>window.open('https://suno.com','_blank'),400);
+}
+function resetAll(){
+  if(!confirm('Reset all progress?'))return;
+  S=STEPS.map(s=>({id:s.id,pr:'',out:[],sel:null,done:false,exp:true,revs:[],imgs:[]}));
+  LD={};sv();render();
+}
+
+initK();render();
+
+</script>
+</body>
+</html>
