@@ -22,15 +22,15 @@
   var COMP_W = 1920;
   var COMP_H = 1080;
   var COMP_FPS = 30;
-  var COMP_DUR = 32; // +2s padding
+  var COMP_DUR = 14; // +2s padding
   var TRANS_DUR = 0.5;
   var NUM_SHOTS = 6;
   
   // Shot durations from script (seconds)
-  var shotDurs = [5,5,5,6,5,4];
+  var shotDurs = [3,2,2,3,1,1];
 
   // On-screen text from script
-  var shotTexts = ["—","—","\"PRE-MARKET ACCESS\" (Futura PT Light, mint accent)","\"WHALES MARKET\" (Helvetica Neue Light, royal purple gradient)","\"START TRADING PRE-MARKET NOW\" (Futura PT Medium, charcoal with mint underline)","\"WHALES.MARKET\" (Helvetica Neue Light, silver metallic finish)<br>\"Trade before everyone else\" (Futura PT Light, charcoal #2C2C2C, positioned 24px below logo baseline)"];
+  var shotTexts = ["[None]","\"PRE-MARKET\" (IBM Plex Mono, #00FF9F, 48pt, top-left)","\"OUTRUN\\nTHE NOISE\" (Montserrat Bold, split-stack, #A020F0, 64pt [upsized], center-frame, motion-blur applied to text during acceleration phase)","\"BREACH\" (Montserrat Bold, #00FF9F, 80pt [upsized +8pt], explosive scale-in, kinetic drop from top, motion blur applied, secondary glow text at +2 frame offset: #A020F0 @ 30% opacity for chromatic depth)","\"Trade the Future\\nBefore It Hits\" (Montserrat Bold, stacked left-align, #00FF9F primary + #A020F0 secondary highlights on \"Before,\" 48pt [upsized +4pt], 15% opacity fade-in over 0.6s [accelerated from 0.8s])","Logo Lock: \"whales market\" logo + \".market\" domain (Montserrat Bold, #00FF9F, 54pt) + CTA button: \"Trade before everyone else\" (background: #A020F0, text: #1A1A2E, Montserrat Bold, 28pt [adjusted for longer text], 12px border-radius, hover-state glow: #00FF9F 6px blur, subtle scale-hover animation: 1.08x on loop)"];
 
   // --- FOLDER PICKER ---
   var projFolder = Folder.selectDialog("Select your project folder (containing shot/, voice/, music/, assets/)");

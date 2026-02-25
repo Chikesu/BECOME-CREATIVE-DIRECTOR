@@ -132,7 +132,6 @@ label:hover{border-color:var(--blue) !important;color:var(--blue) !important}
       <div class="c"><div class="lbl">CLAUDE API KEY</div><div class="kr"><input type="password" id="ck" placeholder="sk-ant-..." oninput="saveK()"><button class="bs" onclick="togV('ck',this)">Show</button></div><div class="ks" id="cks"></div><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);margin-top:2px">Get: <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--blue);text-decoration:none">console.anthropic.com</a></div></div>
       <div class="c"><div class="lbl">ELEVENLABS API KEY</div><div class="kr"><input type="password" id="ek" placeholder="Paste key" oninput="saveK()"><button class="bs" onclick="togV('ek',this)">Show</button></div><div class="ks" id="eks"></div></div>
       <div class="c"><div class="lbl">VOICE ID <span style="opacity:.5">(default: Adam)</span></div><div class="kr"><input id="ev" placeholder="pNInz6obpgDQGcFmaJgB" oninput="saveK()"><button class="bs" onclick="window.open('https://elevenlabs.io/app/voice-library','_blank')">Browse</button></div></div>
-      <div class="c"><div class="lbl">CLAUDE MODEL</div><select id="mdl" onchange="saveK()" style="width:100%;padding:8px 12px;border-radius:8px;border:1px solid var(--bdr);background:var(--inp);color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;cursor:pointer"><option value="claude-sonnet-4-20250514">Sonnet 4 (Best quality)</option><option value="claude-haiku-4-5-20251001">Haiku 4.5 (Fast, less 529)</option></select><div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);margin-top:4px">Switch to Haiku if Sonnet keeps returning 529</div></div>
     </div>
   </div>
   <div class="prog"><div class="phdr"><span>PROGRESS</span><span id="ptxt"></span></div><div class="pbar"><div class="pfil" id="pfil"></div></div></div>
@@ -141,12 +140,7 @@ label:hover{border-color:var(--blue) !important;color:var(--blue) !important}
 </div>
 <div class="tst" id="tst"></div>
 <script>
-const SK="vp-v6",KK="vp-k3";
-const MODELS=[
-  {id:"claude-sonnet-4-20250514",name:"Sonnet 4 (Best)"},
-  {id:"claude-haiku-4-5-20251001",name:"Haiku 4.5 (Fast, less 529)"},
-];
-let MDL=MODELS[0].id;
+const SK="vp-v6",KK="vp-k3",MDL="claude-sonnet-4-20250514";
 const SYS=`You are an AI Video Production Director. Be extremely specific. Use professional video/cinema terminology. Think like a cinematographer and creative director.`;
 
 const STEPS=[
@@ -167,8 +161,8 @@ function $(id){return document.getElementById(id)}
 function ld(){try{return JSON.parse(localStorage.getItem(SK))}catch(e){return null}}
 function sv(){try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}}
 function loadK(){try{return JSON.parse(localStorage.getItem(KK))||{}}catch(e){return{}}}
-function saveK(){localStorage.setItem(KK,JSON.stringify({ck:$('ck').value,ek:$('ek').value,ev:$('ev').value,mdl:$('mdl').value}));MDL=$('mdl').value;updK()}
-function initK(){const k=loadK();if(k.ck)$('ck').value=k.ck;if(k.ek)$('ek').value=k.ek;if(k.ev)$('ev').value=k.ev;if(k.mdl){$('mdl').value=k.mdl;MDL=k.mdl}updK()}
+function saveK(){localStorage.setItem(KK,JSON.stringify({ck:$('ck').value,ek:$('ek').value,ev:$('ev').value}));updK()}
+function initK(){const k=loadK();if(k.ck)$('ck').value=k.ck;if(k.ek)$('ek').value=k.ek;if(k.ev)$('ev').value=k.ev;updK()}
 function updK(){$('cks').innerHTML=$('ck').value?'<span style="color:#00FF88">\u25CF Saved</span>':'<span style="color:#FF8A00">\u25CF No key</span>';$('eks').innerHTML=$('ek').value?'<span style="color:#00FF88">\u25CF Saved</span>':'<span style="color:#FF8A00">\u25CF No key</span>'}
 function togS(){const p=$('sp');p.classList.toggle('open');$('stogbtn').textContent=p.classList.contains('open')?'\uD83D\uDD11 Hide API Settings':'\uD83D\uDD11 Show API Settings'}
 function togV(id,b){const i=$(id);i.type=i.type==='password'?'text':'password';b.textContent=i.type==='password'?'Show':'Hide'}
@@ -226,8 +220,8 @@ function upProg(){
 }
 
 function exBySep(txt,tag){
-  // Find ===TAG=== separator with optional # prefix, spaces, markdown
-  const re=new RegExp('(?:^|\\n)\\s*#*\\s*===\\s*'+tag+'\\s*===\\s*\\n([\\s\\S]*?)(?=\\n\\s*#*\\s*===\\s*[A-Z]+\\s*===|$)','i');
+  // Find ===TAG=== separator and extract content until next separator or end
+  const re=new RegExp('===\\s*'+tag+'\\s*===\\s*\\n([\\s\\S]*?)(?=\\n===\\s*[A-Z]+\\s*===|$)','i');
   const m=txt.match(re);
   if(m&&m[1].trim())return m[1].trim();
   // Fallback: try ## heading format
@@ -256,20 +250,9 @@ async function callC(prompt,withImages){
   }else{
     content=prompt;
   }
-  const MAX_RETRIES=5;
-  for(let attempt=0;attempt<MAX_RETRIES;attempt++){
-    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k.ck,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MDL,max_tokens:4096,system:SYS,messages:[{role:'user',content}]})});
-    if(r.ok){
-      const d=await r.json();return d.content.map(c=>c.text||'').join('\n');
-    }
-    if(r.status===529&&attempt<MAX_RETRIES-1){
-      const wait=Math.pow(2,attempt)*2;// 2s, 4s, 8s, 16s, 32s
-      toast('\u26A0 Claude overloaded — retry '+( attempt+1)+'/'+MAX_RETRIES+' in '+wait+'s...');
-      await new Promise(res=>setTimeout(res,wait*1000));
-      continue;
-    }
-    throw new Error('Claude error '+r.status+': '+(await r.text()).slice(0,150));
-  }
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':k.ck,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:MDL,max_tokens:4096,system:SYS,messages:[{role:'user',content}]})});
+  if(!r.ok)throw new Error('Claude error '+r.status+': '+(await r.text()).slice(0,150));
+  const d=await r.json();return d.content.map(c=>c.text||'').join('\n');
 }
 
 function cleanVO(text){
@@ -483,48 +466,37 @@ async function callSuno(prompt,onStatus){
 
 // --- Parsers ---
 function parseDirs(text){
-  let pts=text.split(/\n---\n/).filter(p=>p.trim());
-  // Filter out non-direction blocks (intro headers, production notes, summaries)
-  pts=pts.filter(p=>{
-    const t=p.trim().toLowerCase();
-    // Must have concept or direction-like content
-    if(!/concept|direction\s*name/i.test(p)&&!/#[0-9A-Fa-f]{6}/.test(p)) return false;
-    // Reject production notes, summaries, general notes
-    if(/^(\*?\*?production\s*notes|notes|summary|general|additional|key\s*considerations)/im.test(t)) return false;
-    // Must be substantial (>200 chars) to be a real direction
-    if(p.trim().length<200) return false;
-    return true;
-  });
-  // Take exactly 3
-  if(pts.length>3) pts=pts.slice(0,3);
+  const pts=text.split(/\n---\n/).filter(p=>p.trim());
   return pts.map((p,pi)=>{
+    // Try multiple patterns for name extraction
     let nm='Direction '+(pi+1);
-    // Pattern: **Direction Name:** Something or **Direction Name:** "Something"
-    const m0=p.match(/\*?\*?direction\s*name\s*[:.]?\*?\*?\s*[""\u201C\u201D]?([^""\u201C\u201D\n*]+?)[""\u201C\u201D]?\s*(?:\n|\*)/i);
     // Pattern: Direction 1: "Name" or **Direction 1: "Name"**
     const m1=p.match(/direction\s*\d*\s*[:.]?\s*[""\u201C\u201D]([^""\u201C\u201D]+)[""\u201C\u201D]/i);
-    // Pattern: **Name** at start (but NOT **Concept:** or **Mood:** etc)
-    const m2=p.match(/^\s*\*\*(?!concept|mood|visual|color|typo|reference)([^*:]+?)\*\*/im);
+    // Pattern: **Name** at start or after Direction N:
+    const m2=p.match(/\*\*(?:direction\s*\d*\s*[:.]?\s*)?[""\u201C\u201D]?([^*""\u201C\u201D]+?)[""\u201C\u201D]?\*\*/i);
+    // Pattern: Direction Name: **Something**
+    const m3=p.match(/direction\s*name.*?:\s*\*?\*?(.+?)(?:\*\*|\n)/i);
     // Pattern: # Name or ## Name
     const m4=p.match(/^#+\s*(?:direction\s*\d*\s*[:.]?\s*)?(.+)/im);
     
-    if(m0&&m0[1].trim()) nm=m0[1].trim();
-    else if(m1&&m1[1].trim()) nm=m1[1].trim();
+    if(m1&&m1[1].trim()) nm=m1[1].trim();
     else if(m2&&m2[1].trim()&&m2[1].trim().length<60) nm=m2[1].trim();
+    else if(m3&&m3[1].trim()) nm=m3[1].trim();
     else if(m4&&m4[1].trim()) nm=m4[1].trim().replace(/\*\*/g,'').replace(/[""\u201C\u201D]/g,'');
     
-    // Clean up
+    // Clean up: remove "Direction N:" prefix if still there
     nm=nm.replace(/^direction\s*\d*\s*[:.\-]\s*/i,'').replace(/[""\u201C\u201D]/g,'').trim();
-    // Reject generic names
-    if(!nm||/^(concept|direction\s*\d*|mood|visual|color)$/i.test(nm)) nm='Direction '+(pi+1);
+    if(!nm) nm='Direction '+(pi+1);
 
     const cols=[...p.matchAll(/#([0-9A-Fa-f]{6})/g)].map(m=>'#'+m[1]);
     const labs=[...p.matchAll(/#[0-9A-Fa-f]{6}\s*[-\u2013\u2014:()\u2014]?\s*([^\n*#,]+)/g)].map(m=>m[1].trim().replace(/^\(/,'').replace(/\)$/,''));
     const mood=(p.match(/mood.*?tone.*?:(.*?)(?:\n|$)/i)||p.match(/mood.*?:(.*?)(?:\n|$)/i)||['',''])[1].trim().split(/[,;]/).map(s=>s.trim()).filter(Boolean);
     const style=(p.match(/visual\s*style.*?:(.*?)(?:\n|$)/i)||['',''])[1].trim();
     const typo=(p.match(/typography.*?:(.*?)(?:\n|$)/i)||['',''])[1].trim();
+    // Extract concept paragraph
     const conceptM=p.match(/concept.*?:([\s\S]*?)(?=\n\s*[-*]?\s*\*?\*?mood|\n\s*[-*]?\s*\*?\*?visual|\n\s*[-*]?\s*\*?\*?color|\n\s*\n)/i);
     const concept=conceptM?conceptM[1].replace(/\*\*/g,'').trim():'';
+    // Extract reference vibe
     const vibeM=p.match(/reference\s*vibe.*?:(.*?)$/im);
     const vibe=vibeM?vibeM[1].replace(/\*\*/g,'').replace(/\*/g,'').trim():'';
     return{nm,text:p,cols,labs,mood,style,typo,concept,vibe};
@@ -580,7 +552,7 @@ async function gen(i){
       const b=S[0].pr;if(!b)throw new Error('Fill in Brief first');
       const hasImgs=S[0].imgs&&S[0].imgs.length>0;
       const imgNote=hasImgs?'\n\nI have attached '+S[0].imgs.length+' reference image(s) (logo, brand visuals, style references). Analyze them carefully and incorporate the brand colors, visual style, and mood into your creative directions. Match typography and color palette to the brand identity shown.':'';
-      const res=await callC('Analyze this brief and propose exactly 3 creative directions.\n\nYou MUST use this EXACT format for each direction (separated by ---):\n\n**Direction Name:** [2-3 evocative word title like "Neon Depths" or "Apex Predator"]\n**Concept:** [1 paragraph describing the creative vision]\n**Mood & Tone:** [3-5 keywords]\n**Visual Style:** [cinematic/minimal/abstract etc]\n**Color Palette:**\n- #HEX1 — Description\n- #HEX2 — Description\n- #HEX3 — Description\n- #HEX4 — Description\n- #HEX5 — Description\n**Typography:** [font pairing suggestion]\n**Reference Vibe:** [what it feels like]\n\nIMPORTANT: Start each direction with **Direction Name:** followed by a short creative title. Do NOT use generic names like "Direction 1". Separate the 3 directions with --- on its own line.'+imgNote+'\n\nBRIEF:\n'+b, hasImgs);
+      const res=await callC('Analyze this brief and propose exactly 3 creative directions.\nFor EACH:\n- **Direction Name** (2-3 evocative words)\n- **Concept** (1 paragraph)\n- **Mood & Tone** (3-5 keywords)\n- **Visual Style** (cinematic/minimal/abstract etc)\n- **Color Palette** (exactly 5 colors as #HEX - description)\n- **Typography** (font pairing)\n- **Reference Vibe** (what it feels like)\n\nSeparate directions with ---'+imgNote+'\n\nBRIEF:\n'+b, hasImgs);
       const dirs=parseDirs(res);
       s.out=dirs.map((d,j)=>({text:d.text,id:Date.now()+j,parsed:d}));
       s.sel=null;
